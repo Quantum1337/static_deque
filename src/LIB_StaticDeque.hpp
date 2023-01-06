@@ -167,7 +167,7 @@ namespace std_static
                 DEQUE_ASSERT(!full());
                 assert_iterator_in_range(_pos);
 
-                unchecked_insert_value(_pos, 1, std::forward<Args>(_args)...);
+                return unchecked_insert_value(_pos, 1, std::forward<Args>(_args)...);
             }
 
             iterator erase(const_iterator _pos)
@@ -367,11 +367,11 @@ namespace std_static
                 (void) std::rotate(positionToInsert, oldEnd, end());   
                 return positionToInsert;                            
             }
-            template<typename Type>
-            iterator unchecked_insert_value(const_iterator _pos, size_type _count, Type&& _value) noexcept
+            template<typename... Type>
+            iterator unchecked_insert_value(const_iterator _pos, size_type _count, Type&&... _value) noexcept
             {
                 iterator oldEnd{end()};
-                unchecked_push_back_count(_count, std::forward<Type>(_value));
+                unchecked_push_back_count(_count, std::forward<Type>(_value)...);
                 
                 iterator positionToInsert{to_iterator(_pos)};
                 (void) std::rotate(positionToInsert, oldEnd, end());
@@ -395,12 +395,12 @@ namespace std_static
                 // else: Same size as before  
             }
 
-            template<typename Type>
-            void unchecked_push_back_count(size_type _count, Type&& _value)
+            template<typename... Type>
+            void unchecked_push_back_count(size_type _count, Type&&... _value)
             {
                 while (_count != 0)
                 {
-                    unchecked_push_back(std::forward<Type>(_value));
+                    unchecked_push_back(std::forward<Type>(_value)...);
                     --_count;
                 }
             }
