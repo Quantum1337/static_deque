@@ -520,19 +520,19 @@ namespace std_static
             {
                 static_assert(STORAGE_SIZE > 1, "Invalid size");
             }
-            static_deque(size_type _count, T const& _value)
+            explicit static_deque(size_type _count, T const& _value)
             : static_deque()
             {
                 DEQUE_ASSERT(_count < max_size());
 
-                unchecked_push_back_count(_count, _value);       
+                this->unchecked_push_back_count(_count, _value);       
             }
             explicit static_deque(size_type _count)
             : static_deque()
             {
                 DEQUE_ASSERT(_count < max_size());
 
-                unchecked_push_back_count(_count, T()); 
+                this->unchecked_push_back_count(_count, std::move(T())); 
             }
             template<class InputIt>
             static_deque(InputIt _first, InputIt _last)

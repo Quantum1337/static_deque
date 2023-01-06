@@ -27,18 +27,29 @@ void Test_Constructors(void)
         TEST_ASSERT_EQUAL(0u, UT_deque.size());
     }
 
-    { // Initializer list constructor
-        static constexpr size_t DEQUE_SIZE = 6u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+    { // Count / lvalue constructor
+        static constexpr size_t DEQUE_SIZE = 5u;
+        uint8_t UT_lvalue = 22;
+        static_deque<uint8_t, DEQUE_SIZE> UT_deque(5, UT_lvalue);
 
-        TEST_ASSERT_EQUAL(11, UT_deque[0]);
-        TEST_ASSERT_EQUAL(16, UT_deque[5]);
-        TEST_ASSERT_EQUAL(11, UT_deque.front());
-        TEST_ASSERT_EQUAL(16, UT_deque.back());
+        std::vector<uint32_t> UT_correctLayout{22,22,22,22,22};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+    }
+    
+    { // Count constructor
+        static constexpr size_t DEQUE_SIZE = 5u;
+        static_deque<uint8_t, DEQUE_SIZE> UT_deque(5);
 
-        TEST_ASSERT_EQUAL(12, UT_deque[1]);
-        TEST_ASSERT_EQUAL(13, UT_deque[2]);
-        TEST_ASSERT_EQUAL(14, UT_deque[3]);
+        std::vector<uint32_t> UT_correctLayout{0,0,0,0,0};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+    }
+
+    { // Iterator constructor
+        static constexpr size_t DEQUE_SIZE = 5u;
+        std::vector<uint8_t> UT_correctLayout{55,66,77,88,99};
+        static_deque<uint8_t, DEQUE_SIZE> UT_deque(UT_correctLayout.begin(), UT_correctLayout.end());
+
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
     }
 
     { // Copy-constructor 
@@ -52,6 +63,24 @@ void Test_Constructors(void)
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
         TEST_ASSERT_EQUAL(7, UT_dequeSink.size());
         TEST_ASSERT_TRUE(UT_dequeSink.full());
+    }
+
+    { // Move-constructor 
+        static constexpr size_t DEQUE_SIZE = 8u;
+        static constexpr size_t DEQUE_SIZE_SINK = 7u;
+        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink(static_deque<uint32_t, DEQUE_SIZE>{99,88,77,66,55,44,33});
+
+        std::vector<uint32_t> UT_correctLayout{99, 88, 77, 66, 55, 44, 33};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
+        TEST_ASSERT_EQUAL(7, UT_dequeSink.size());
+    }
+
+    { // Initializer list constructor
+        static constexpr size_t DEQUE_SIZE = 6u;
+        static_deque<uint32_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+
+        std::vector<uint32_t> UT_correctLayout{11, 12, 13, 14, 15, 16};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
     }
 
 }
