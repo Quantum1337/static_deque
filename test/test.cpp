@@ -365,12 +365,18 @@ void Test_ElementAccess(void)
     TEST_ASSERT_EQUAL(6, UT_deque[1]);
     TEST_ASSERT_EQUAL(7, UT_deque[2]);
     TEST_ASSERT_EQUAL(8, UT_deque[3]);
+    TEST_ASSERT_EQUAL(5, UT_deque.at(0));
+    TEST_ASSERT_EQUAL(6, UT_deque.at(1));
+    TEST_ASSERT_EQUAL(7, UT_deque.at(2));
+    TEST_ASSERT_EQUAL(8, UT_deque.at(3));
 
     UT_deque[1] = 11;
-    UT_deque[3] = 13;
+    UT_deque.at(3) = 13;
 
     TEST_ASSERT_EQUAL(11, UT_deque[1]);
     TEST_ASSERT_EQUAL(13, UT_deque[3]);
+    TEST_ASSERT_EQUAL(11, UT_deque.at(1));
+    TEST_ASSERT_EQUAL(13, UT_deque.at(3));
 }
 
 void Test_Insert(void)
