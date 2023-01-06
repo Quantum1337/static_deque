@@ -60,22 +60,23 @@ void Test_LValue_PushBack(void)
 {
     static constexpr size_t DEQUE_SIZE = 6u;
     static_deque<uint8_t, DEQUE_SIZE> UT_deque;
+    std::vector<uint8_t> UT_lvalues{6, 10, 11, 12, 13, 14};
 
-    UT_deque.push_back(6);
+    UT_deque.push_back(UT_lvalues[0]);
     TEST_ASSERT_EQUAL(false, UT_deque.empty());
     TEST_ASSERT_EQUAL(6, UT_deque.back());
     TEST_ASSERT_EQUAL(6, UT_deque.front());
 
-    UT_deque.push_back(10);
-    UT_deque.push_back(11);
-    UT_deque.push_back(12);
-    UT_deque.push_back(13);
+    UT_deque.push_back(UT_lvalues[1]);
+    UT_deque.push_back(UT_lvalues[2]);
+    UT_deque.push_back(UT_lvalues[3]);
+    UT_deque.push_back(UT_lvalues[4]);
     TEST_ASSERT_EQUAL(false, UT_deque.full());
     TEST_ASSERT_EQUAL(DEQUE_SIZE - 1u, UT_deque.size());
     TEST_ASSERT_EQUAL(13, UT_deque.back());
     TEST_ASSERT_EQUAL(6, UT_deque.front());
 
-    UT_deque.push_back(14);
+    UT_deque.push_back(UT_lvalues[5]);
     TEST_ASSERT_EQUAL(14, UT_deque.back());
     TEST_ASSERT_EQUAL(6, UT_deque.front());
     TEST_ASSERT_EQUAL(true, UT_deque.full());
@@ -86,24 +87,25 @@ void Test_LValue_PushFront(void)
 {
     static constexpr size_t DEQUE_SIZE = 7u;
     static_deque<uint8_t, DEQUE_SIZE> UT_deque;
+    std::vector<uint8_t> UT_lvalues{9, 10, 11, 12, 13, 14, 15};
 
-    UT_deque.push_front(9);
+    UT_deque.push_front(UT_lvalues[0]);
     TEST_ASSERT_EQUAL(false, UT_deque.empty());
     TEST_ASSERT_EQUAL(9, UT_deque.back());
     TEST_ASSERT_EQUAL(9, UT_deque.front());
     TEST_ASSERT_EQUAL(1u, UT_deque.size());
 
-    UT_deque.push_front(10);
-    UT_deque.push_front(11);
-    UT_deque.push_front(12);
-    UT_deque.push_front(13);
-    UT_deque.push_front(14);
+    UT_deque.push_front(UT_lvalues[1]);
+    UT_deque.push_front(UT_lvalues[2]);
+    UT_deque.push_front(UT_lvalues[3]);
+    UT_deque.push_front(UT_lvalues[4]);
+    UT_deque.push_front(UT_lvalues[5]);
     TEST_ASSERT_EQUAL(false, UT_deque.full());
     TEST_ASSERT_EQUAL(DEQUE_SIZE - 1u, UT_deque.size());
     TEST_ASSERT_EQUAL(9, UT_deque.back());
     TEST_ASSERT_EQUAL(14, UT_deque.front());
 
-    UT_deque.push_front(15);
+    UT_deque.push_front(UT_lvalues[6]);
     TEST_ASSERT_EQUAL(9, UT_deque.back());
     TEST_ASSERT_EQUAL(15, UT_deque.front());
     TEST_ASSERT_EQUAL(true, UT_deque.full());
