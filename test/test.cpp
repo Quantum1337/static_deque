@@ -608,6 +608,62 @@ void Test_EmplaceFront(void)
 
 }
 
+void Test_Emplace(void)
+{
+    struct SomeData
+    {
+        SomeData(uint32_t _value, uint32_t* _ptr)
+        : value(_value)
+        , ptr(_ptr)
+        {
+        }
+
+        SomeData(SomeData const& _other)
+        : value(_other.value)
+        , ptr(_other.ptr)
+        {
+        }
+
+        SomeData& operator=(SomeData&& _other)
+        {
+            ptr = _other.ptr;
+            value = _other.value;
+            return *this;
+        }
+
+        uint32_t  value;
+        uint32_t* ptr;
+    };
+    uint32_t dataForPtr1 = 5566;
+    uint32_t dataForPtr2 = 6655;
+    uint32_t dataForPtr3 = 9933;
+
+    static constexpr size_t DEQUE_SIZE = 8u;
+    static_deque<SomeData, DEQUE_SIZE> UT_deque(5, SomeData(99, &dataForPtr1));
+
+    {
+        UT_deque.emplace((UT_deque.begin() += 1), 22, &dataForPtr2);
+        TEST_ASSERT_EQUAL(6, UT_deque.size());
+    }
+
+    {
+        UT_deque.emplace((UT_deque.begin() += 3), 33, &dataForPtr3);
+        TEST_ASSERT_EQUAL(7, UT_deque.size());
+    }
+
+    TEST_ASSERT_EQUAL(99, UT_deque[0].value);
+    TEST_ASSERT_EQUAL(5566, *(UT_deque[0].ptr));
+
+    TEST_ASSERT_EQUAL(22, UT_deque[1].value);
+    TEST_ASSERT_EQUAL(6655, *(UT_deque[1].ptr));
+
+    TEST_ASSERT_EQUAL(33, UT_deque[3].value);
+    TEST_ASSERT_EQUAL(9933, *(UT_deque[3].ptr));
+
+    TEST_ASSERT_EQUAL(99, UT_deque[6].value);
+    TEST_ASSERT_EQUAL(5566, *(UT_deque[6].ptr));
+}
+
 void Test_Assignments(void)
 {
     { // Copy-assignment (to derived class)
@@ -691,6 +747,7 @@ int main(int argc, char const *argv[])
     RUN_TEST(Test_Erase);
     RUN_TEST(Test_EmplaceBack);
     RUN_TEST(Test_EmplaceFront);
+    RUN_TEST(Test_Emplace);
     RUN_TEST(Test_Assignments);
     return UNITY_END();
 
