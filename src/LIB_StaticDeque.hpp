@@ -420,8 +420,12 @@ class static_deque<T>
         template<typename... Type>
         void unchecked_push_front(Type&&... _value)
         {
-            --m_tail;
-            new (&(*m_tail)) T(std::forward<Type>(_value)...);
+            iterator tryTail(m_tail);
+
+            --tryTail;
+            new (&(*tryTail)) T(std::forward<Type>(_value)...);
+
+            m_tail = tryTail;
         }
 
         void unchecked_pop_front()
