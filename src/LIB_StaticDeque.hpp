@@ -21,7 +21,6 @@ class static_deque<T>
         // -- Traits
         using value_type = T;
         using reference = value_type&;
-        using rvalue_reference = value_type&&;
         using const_reference = value_type const&;
         using pointer = value_type*;
         using const_pointer = value_type const*;
@@ -504,7 +503,6 @@ class static_deque final : public static_deque<T>
         // -- Traits
         using value_type = typename base::value_type;
         using reference = typename base::reference;
-        using rvalue_reference = typename base::rvalue_reference;
         using const_reference = typename base::const_reference;
         using pointer = typename base::pointer;
         using const_pointer = typename base::const_pointer;
