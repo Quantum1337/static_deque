@@ -437,16 +437,16 @@ class static_deque<T>
             {
                 iterator pos = std::swap_ranges(begin(), end(), _other.begin());
                 insert(cend(), 
-                        std::make_move_iterator(pos), 
-                        std::make_move_iterator(_other.end()));
+                       std::make_move_iterator(pos), 
+                       std::make_move_iterator(_other.end()));
                 _other.erase(pos, _other.cend());
             }
             else
             {
                 iterator pos = std::swap_ranges(_other.begin(), _other.end(), begin());
                 _other.insert(_other.cend(), 
-                                std::make_move_iterator(pos), 
-                                std::make_move_iterator(end()));
+                              std::make_move_iterator(pos), 
+                              std::make_move_iterator(end()));
                 erase(pos, cend());
             }
         }
@@ -552,8 +552,8 @@ class static_deque final : public static_deque<T>
         : static_deque()
         {
             this->internal_rangeInit(std::make_move_iterator(_other.begin()), 
-                                                std::make_move_iterator(_other.end()), 
-                                                this->back_inserter(*this));
+                                     std::make_move_iterator(_other.end()), 
+                                     this->back_inserter(*this));
         }
         static_deque(std::initializer_list<T> _iList)
         : static_deque()
