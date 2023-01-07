@@ -384,13 +384,13 @@ namespace std_static
 
                 if(_count < curSize)
                 {
-                    reverse_iterator newEnd(rbegin() + static_cast<difference_type>(curSize - _count));
+                    reverse_iterator newEnd(begin() + static_cast<difference_type>(_count));
                     std::for_each(rbegin(), newEnd, back_destroyer(*this));
                 }
                 else if(_count > curSize)
                 {
 
-                    unchecked_push_back_count(_count, _value);
+                    unchecked_push_back_count((_count - curSize), _value);
                 }   
                 // else: Same size as before  
             }
