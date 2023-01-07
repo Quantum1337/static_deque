@@ -705,7 +705,7 @@ void Test_Emplace(void)
 
 void Test_Assignments(void)
 {
-    { // Copy-assignment (to derived class)
+    { // Copy-assignment (to derived class) (1)
         static constexpr size_t DEQUE_SIZE = 8u;
         static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
 
@@ -722,7 +722,24 @@ void Test_Assignments(void)
         TEST_ASSERT_TRUE(UT_dequeSink.full());
     }
 
-    { // Initializer-List assignment (to derived class)
+    { // Move-assignment (to derived class) (2)
+        static constexpr size_t DEQUE_SIZE = 8u;
+        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
+
+        static constexpr size_t DEQUE_SIZE_SINK = 7u;
+        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
+        TEST_ASSERT_FALSE(UT_dequeSink.full());
+
+        UT_dequeSink = std::move(UT_dequeSource);
+
+        std::vector<uint32_t> UT_correctLayout{99, 88, 77, 66, 55, 44, 33};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
+        TEST_ASSERT_EQUAL(7, UT_dequeSink.size());
+        TEST_ASSERT_TRUE(UT_dequeSink.full());
+    }
+
+    { // Initializer-List assignment (to derived class) (3)
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
         static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
@@ -736,7 +753,7 @@ void Test_Assignments(void)
         TEST_ASSERT_FALSE(UT_dequeSink.full());
     }
 
-    { // Copy-assignment (to base class)
+    { // Copy-assignment (to base class) (1)
         static constexpr size_t DEQUE_SIZE = 8u;
         static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{88,77,66,55,44,33,22};
 
@@ -754,7 +771,25 @@ void Test_Assignments(void)
         TEST_ASSERT_TRUE(UT_dequeSinkBase.full());
     }
 
-    { // Initializer-List assignment (to base class)
+    { // Copy-assignment (to base class) (2)
+        static constexpr size_t DEQUE_SIZE = 8u;
+        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{88,77,66,55,44,33,22};
+
+        static constexpr size_t DEQUE_SIZE_SINK = 7u;
+        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
+        TEST_ASSERT_FALSE(UT_dequeSink.full());
+
+        static_deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
+        UT_dequeSinkBase = std::move(UT_dequeSource);
+
+        std::vector<uint32_t> UT_correctLayout{88, 77, 66, 55, 44, 33, 22};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSinkBase.begin()));
+        TEST_ASSERT_EQUAL(7, UT_dequeSinkBase.size());
+        TEST_ASSERT_TRUE(UT_dequeSinkBase.full());
+    }
+
+    { // Initializer-List assignment (to base class) (3)
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
         static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
