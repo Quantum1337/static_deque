@@ -543,6 +543,45 @@ void Test_Erase(void)
     }
 }
 
+void Test_Resize(void)
+{
+
+    static constexpr size_t DEQUE_SIZE_SINK = 10u;
+    static_deque<uint32_t, DEQUE_SIZE_SINK> UT_deque{111, 222, 333};
+
+    UT_deque.resize(6);
+
+    {
+        std::vector<uint32_t> UT_correctLayout{111, 222, 333, 0, 0, 0};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+        TEST_ASSERT_EQUAL(6, UT_deque.size());
+    }
+
+    UT_deque.resize(10, 10);
+
+    {
+        std::vector<uint32_t> UT_correctLayout{111, 222, 333, 0, 0, 0, 10, 10, 10 ,10};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+        TEST_ASSERT_EQUAL(10, UT_deque.size());
+    }
+
+    UT_deque.resize(6);
+
+    {
+        std::vector<uint32_t> UT_correctLayout{111, 222, 333, 0, 0, 0};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+        TEST_ASSERT_EQUAL(6, UT_deque.size());
+    }
+
+    UT_deque.resize(1);
+
+    {
+        std::vector<uint32_t> UT_correctLayout{111};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+        TEST_ASSERT_EQUAL(1, UT_deque.size());
+    }
+}
+
 void Test_EmplaceBack(void)
 {
 
@@ -745,6 +784,7 @@ int main(int argc, char const *argv[])
     RUN_TEST(Test_Swap);
     RUN_TEST(Test_Clear);
     RUN_TEST(Test_Erase);
+    RUN_TEST(Test_Resize);
     RUN_TEST(Test_EmplaceBack);
     RUN_TEST(Test_EmplaceFront);
     RUN_TEST(Test_Emplace);
