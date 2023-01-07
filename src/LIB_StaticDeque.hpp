@@ -435,9 +435,9 @@ class static_deque<T>
             if(size() < _other.size())
             {
                 iterator pos = std::swap_ranges(begin(), end(), _other.begin());
-                insert(cend(), 
-                       std::make_move_iterator(pos), 
-                       std::make_move_iterator(_other.end()));
+                unchecked_insert_it(cend(), 
+                                    std::make_move_iterator(pos), 
+                                    std::make_move_iterator(_other.end()));
                 _other.erase(pos, _other.cend());
             }
             else
@@ -446,7 +446,7 @@ class static_deque<T>
                 _other.insert(_other.cend(), 
                               std::make_move_iterator(pos), 
                               std::make_move_iterator(end()));
-                erase(pos, cend());
+                unchecked_erase(pos, cend());
             }
         }
 
