@@ -2,6 +2,8 @@
 #include "unity/unity.h"
 
 #include <vector>
+#include <queue>
+#include <stack>
 
 using namespace std_static;
 
@@ -814,6 +816,46 @@ void Test_Assignments(void)
     }
 }
 
+void Test_ContainerAdapter_Queue(void)
+{
+    static constexpr size_t DEQUE_SIZE = 8;
+    std::queue<uint32_t, static_deque<uint32_t, DEQUE_SIZE>> UT_queue;
+
+    UT_queue.push(2);
+    UT_queue.push(3);
+    UT_queue.push(4);
+    UT_queue.push(5);
+    UT_queue.push(6);
+    UT_queue.push(7);
+    UT_queue.push(8);
+
+    for (size_t i = 2; i < 9; i++)
+    {
+        TEST_ASSERT_EQUAL(i, UT_queue.front());
+        UT_queue.pop();
+    }
+}
+
+void Test_ContainerAdapter_Stack(void)
+{
+    static constexpr size_t DEQUE_SIZE = 8;
+    std::stack<uint32_t, static_deque<uint32_t, DEQUE_SIZE>> UT_stack;
+
+    UT_stack.push(8);
+    UT_stack.push(7);
+    UT_stack.push(6);
+    UT_stack.push(5);
+    UT_stack.push(4);
+    UT_stack.push(3);
+    UT_stack.push(2);
+
+    for (size_t i = 2; i < 9; i++)
+    {
+        TEST_ASSERT_EQUAL(i, UT_stack.top());
+        UT_stack.pop();
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     UNITY_BEGIN();
@@ -833,6 +875,8 @@ int main(int argc, char const *argv[])
     RUN_TEST(Test_EmplaceFront);
     RUN_TEST(Test_Emplace);
     RUN_TEST(Test_Assignments);
+    RUN_TEST(Test_ContainerAdapter_Queue);
+    RUN_TEST(Test_ContainerAdapter_Stack);
     return UNITY_END();
 
     return 0;
