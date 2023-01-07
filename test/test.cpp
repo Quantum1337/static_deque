@@ -381,7 +381,7 @@ void Test_ElementAccess(void)
 
 void Test_Insert(void)
 {
-    { // (1)
+    { // Copy insert (1)
         uint8_t value = 111;
         static constexpr size_t DEQUE_SINK_SIZE = 8u;
         static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
@@ -393,10 +393,19 @@ void Test_Insert(void)
         TEST_ASSERT_EQUAL(111, *insertPos);    
     }
 
-    { // (2)
+    { // Move insert (2)
+        uint8_t value = 111;
+        static constexpr size_t DEQUE_SINK_SIZE = 8u;
+        static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
+
+        auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() += 3), std::move(value));   
+
+        std::vector<uint32_t> UT_correctLayout{66, 77, 88, 111, 99, 11, 22};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
+        TEST_ASSERT_EQUAL(111, *insertPos); 
     }
 
-    { // (3)
+    { // Count copy insert (3)
         static constexpr size_t DEQUE_SINK_SIZE = 10u;
         static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
 
@@ -407,7 +416,7 @@ void Test_Insert(void)
         TEST_ASSERT_EQUAL(111, *insertPos);    
     }
 
-    { // (4)
+    { // Iterator insert (4)
         static constexpr size_t DEQUE_SOURCE_SIZE = 6u;
         static_deque<uint8_t, DEQUE_SOURCE_SIZE> UT_dequeSource({11, 12, 13, 14, 15, 16});  
 
@@ -421,7 +430,7 @@ void Test_Insert(void)
         TEST_ASSERT_EQUAL(11, *insertPos);
     }
 
-    { // (5)
+    { // Initializer list insert (5)
         static constexpr size_t DEQUE_SINK_SIZE = 9u;
         static_deque<uint32_t, DEQUE_SINK_SIZE> UT_dequeSink({33, 44 ,55});  
 
