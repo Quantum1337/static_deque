@@ -204,7 +204,7 @@ class static_deque<T>
             unchecked_push_back(std::forward<Args>(_args)...);          
         }
 
-        void pop_back() noexcept
+        void pop_back()
         {
             DEQUE_ASSERT(!empty());
 
@@ -232,7 +232,7 @@ class static_deque<T>
             unchecked_push_front(std::forward<Args>(_args)...);          
         }
 
-        void pop_front() noexcept
+        void pop_front()
         {
             DEQUE_ASSERT(!empty());
 
