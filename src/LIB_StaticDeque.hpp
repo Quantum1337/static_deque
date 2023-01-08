@@ -54,7 +54,7 @@ class static_deque<T>
         // -- Assign
         void assign(size_type _count, T const& _value)
         {
-            DEQUE_ASSERT(_count < max_size());
+            assert_count_in_range(_count);
 
             clear();
             unchecked_push_back_count(_count, _value); 
@@ -74,13 +74,13 @@ class static_deque<T>
         // -- Element access
         reference at(size_type _pos)
         {
-            DEQUE_ASSERT(_pos < size());
+            assert_access_in_range(_pos);
 
             return (*this)[_pos];
         }    
         const_reference at(size_type _pos) const
         {
-            DEQUE_ASSERT(_pos < size());
+            assert_access_in_range(_pos);
 
             return (*this)[_pos];
         }
@@ -125,14 +125,14 @@ class static_deque<T>
 
         iterator insert(const_iterator _pos, T const& _value)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
             assert_iterator_in_range(_pos);
 
             return unchecked_insert_value(_pos, 1, _value); 
         }
         iterator insert(const_iterator _pos, T&& _value)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
             assert_iterator_in_range(_pos);
             
             return unchecked_insert_value(_pos, 1, std::move(_value)); 
@@ -140,8 +140,7 @@ class static_deque<T>
         iterator insert(const_iterator _pos, size_type _count, const_reference _value)
         {
             assert_iterator_in_range(_pos);
-            size_type const new_size{size() + _count};
-            DEQUE_ASSERT(new_size <= max_size()); 
+            assert_count_in_range(size() + _count);
 
             return unchecked_insert_value(_pos, _count, _value);
         }
@@ -150,13 +149,14 @@ class static_deque<T>
         {
             assert_iterator_in_range(_pos);
             assert_valid_iterator_pair(_first, _last);
+            assert_count_in_range(size() + std::distance(_first, _last));
 
             return unchecked_insert_it(_pos, _first, _last);                          
         }
         iterator insert(const_iterator _pos, std::initializer_list<T> _iList)
         {
             assert_iterator_in_range(_pos);
-            DEQUE_ASSERT((size() + _iList.size()) <= max_size());
+            assert_count_in_range(size() + _iList.size());
 
             return unchecked_insert_it(_pos, _iList.begin(), _iList.end());
         }
@@ -164,7 +164,7 @@ class static_deque<T>
         template<class... Args>
         iterator emplace(const_iterator _pos, Args&&... _args)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
             assert_iterator_in_range(_pos);
 
             return unchecked_insert_value(_pos, 1, std::forward<Args>(_args)...);
@@ -185,13 +185,13 @@ class static_deque<T>
 
         void push_back(T const& _value)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
 
             unchecked_push_back(_value);           
         }
         void push_back(T&& _value)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
 
             unchecked_push_back(std::move(_value));
         }
@@ -199,27 +199,27 @@ class static_deque<T>
         template<class... Args>
         void emplace_back(Args&&... _args)
         {
-            DEQUE_ASSERT(!full()); 
+            assert_space_left(); 
 
             unchecked_push_back(std::forward<Args>(_args)...);          
         }
 
         void pop_back()
         {
-            DEQUE_ASSERT(!empty());
+            assert_has_elements();
 
             unchecked_pop_back();
         }
 
         void push_front(T const& _value)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
 
             unchecked_push_front(_value);           
         }
         void push_front(T&& _value)
         {
-            DEQUE_ASSERT(!full());
+            assert_space_left();
 
             unchecked_push_front(std::move(_value));
         }
@@ -227,27 +227,27 @@ class static_deque<T>
         template<class... Args>
         void emplace_front(Args&&... _args)
         {
-            DEQUE_ASSERT(!full()); 
+            assert_space_left(); 
 
             unchecked_push_front(std::forward<Args>(_args)...);          
         }
 
         void pop_front()
         {
-            DEQUE_ASSERT(!empty());
+            assert_has_elements();
 
             unchecked_pop_front();
         }
 
         void resize(size_type _count)
         {
-            DEQUE_ASSERT(_count <= max_size());
+            assert_count_in_range(_count); 
 
             unchecked_resize(_count, T());
         }
         void resize(size_type _count, value_type const& _value)
         {
-            DEQUE_ASSERT(_count < max_size());
+            assert_count_in_range(_count);
 
             unchecked_resize(_count, _value);
         }
@@ -357,9 +357,6 @@ class static_deque<T>
         template<class InputIt>
         iterator unchecked_insert_it(const_iterator _pos, InputIt _first, InputIt _last)
         {
-            difference_type const count{_last - _first};
-            DEQUE_ASSERT((size() + static_cast<size_type>(count)) <= max_size());
-
             iterator oldEnd{end()};
             (void) std::copy(_first, _last, back_inserter(*this));
 
@@ -439,17 +436,22 @@ class static_deque<T>
             if(size() < _other.size())
             {
                 iterator pos = std::swap_ranges(begin(), end(), _other.begin());
+
+                assert_count_in_range(size() + std::distance(pos, _other.end()));
                 unchecked_insert_it(cend(), 
                                     std::make_move_iterator(pos), 
                                     std::make_move_iterator(_other.end()));
+
                 _other.erase(pos, _other.cend());
             }
             else
             {
                 iterator pos = std::swap_ranges(_other.begin(), _other.end(), begin());
+
                 _other.insert(_other.cend(), 
                               std::make_move_iterator(pos), 
                               std::make_move_iterator(end()));
+
                 unchecked_erase(pos, cend());
             }
         }
@@ -458,7 +460,7 @@ class static_deque<T>
         void internal_rangeInit(InputIt _first, InputIt _last, OutputIt _output)
         {
             assert_valid_iterator_pair(_first, _last);
-            DEQUE_ASSERT(std::distance(_first, _last) <= max_size());
+            assert_count_in_range(std::distance(_first, _last));
 
             (void) std::copy(_first, _last, _output);
         }
@@ -469,6 +471,26 @@ class static_deque<T>
         }
 
         // -- Asserts
+        void assert_space_left() noexcept
+        {
+            DEQUE_ASSERT(!full());
+        }
+
+        void assert_has_elements() noexcept
+        {
+            DEQUE_ASSERT(!empty());
+        }
+
+        void assert_count_in_range(size_type _count)
+        {
+            DEQUE_ASSERT(_count <= max_size());
+        }
+
+        void assert_access_in_range(size_type _count)
+        {
+            DEQUE_ASSERT(_count <= size());
+        }
+
         template<typename InputIt>
         void assert_iterator_in_range(InputIt _it) noexcept
         {
@@ -526,14 +548,14 @@ class static_deque final : public static_deque<T>
         explicit static_deque(size_type _count, T const& _value)
         : static_deque()
         {
-            DEQUE_ASSERT(_count < max_size());
+            this->assert_count_in_range(_count);
 
             this->unchecked_push_back_count(_count, _value);       
         }
         explicit static_deque(size_type _count)
         : static_deque()
         {
-            DEQUE_ASSERT(_count < max_size());
+            this->assert_count_in_range(_count);
 
             this->unchecked_push_back_count(_count, std::move(T())); 
         }
