@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Implemenation/LIB_StaticDeque_Iterator.hpp"
-#include "Implemenation/LIB_StaticDeque_Types.hpp"
+#include "Implementation/LIB_StaticDeque_Iterator.hpp"
+#include "Implementation/LIB_StaticDeque_Types.hpp"
 
 #include <algorithm>
 
