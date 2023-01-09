@@ -49,13 +49,13 @@ class iterator
 
         // -- (+)
         iterator operator+(difference_type _offset) { return (iterator(*this) += _offset); }
-        iterator& operator++() { ((++m_index) == storage_size()) ? m_index = 0 : m_index; return *this; }
+        iterator& operator++() { (static_cast<size_type>((++m_index)) == storage_size()) ? m_index = 0 : m_index; return *this; }
         iterator& operator+=(difference_type _offset)
         {
             if(_offset >= 0)
             {
                 m_index += _offset;
-                (m_index >= storage_size()) ? m_index = (m_index - storage_size()) : m_index;
+                (static_cast<size_type>(m_index) >= storage_size()) ? m_index = (m_index - storage_size()) : m_index;
             }
             else
             {

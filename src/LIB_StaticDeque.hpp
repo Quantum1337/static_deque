@@ -115,7 +115,7 @@ class static_deque<T>
         size_type max_size() const { return m_capacity; };
         size_type size() const { return std::distance(m_tail, m_head); };
         bool empty() const { return (m_tail == m_head); };
-        bool full() const { return (std::distance(m_tail, m_head) == m_capacity); };
+        bool full() const { return (static_cast<size_type>(std::distance(m_tail, m_head)) == m_capacity); };
 
         // -- Modifiers
         void clear() noexcept
