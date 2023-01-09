@@ -1,4 +1,4 @@
-#include "../src/LIB_StaticDeque.hpp"
+#include "../src/staticDeque.hpp"
 #include "unity/unity.h"
 
 #include <vector>

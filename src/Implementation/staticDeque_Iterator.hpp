@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LIB_StaticDeque_Types.hpp"
+#include "staticDeque_Types.hpp"
 
 #include <iterator>
 
