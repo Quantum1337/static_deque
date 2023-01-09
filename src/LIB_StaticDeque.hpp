@@ -6,7 +6,7 @@
 #include <algorithm>
 
 // TBD
-#define DEQUE_ASSERT(x)
+#define DEQUE_ASSERT(x) do{ if(x){}else{} }while(0)
 
 namespace std_static
 {
