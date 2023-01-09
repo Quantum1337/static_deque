@@ -97,6 +97,7 @@ class iterator
         TDequeBase const& m_base;
 
         friend class iterator<value_type const, TDequeBase>;
+        friend class iterator<value_type, TDequeBase>;
 };
 
 } // namespace Implementation
