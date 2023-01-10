@@ -332,19 +332,19 @@ class static_deque<T>
             {
                 if(_first == begin())
                 {
-                    std::for_each(_first, _last, front_destroyer(*this));
+                    std::for_each(_first, _last, front_destroyer(*this)); //LCOV_EXCL_BR_LINE: We are not testing std::for_each branches
                     return to_iterator(_last);
                 }
                 else if (_last == end())
                 {
-                    std::for_each(std::make_reverse_iterator(_last), std::make_reverse_iterator(_first), back_destroyer(*this));
+                    std::for_each(std::make_reverse_iterator(_last), std::make_reverse_iterator(_first), back_destroyer(*this)); //LCOV_EXCL_BR_LINE: We are not testing std::for_each branches
                     return end();
                 }
                 else
                 {
                     //ToDo: Pop_Back / Pop_Front depends on distance to begin() / end()
-                    static_cast<void>(std::rotate(to_iterator(_first), to_iterator(_last), end()));
-                    std::for_each(std::make_reverse_iterator(_last), std::make_reverse_iterator(_first), back_destroyer(*this));
+                    static_cast<void>(std::rotate(to_iterator(_first), to_iterator(_last), end())); //LCOV_EXCL_BR_LINE: We are not testing std::rotate branches
+                    std::for_each(std::make_reverse_iterator(_last), std::make_reverse_iterator(_first), back_destroyer(*this)); //LCOV_EXCL_BR_LINE: We are not testing std::for_each branches
                     return to_iterator(_first);
                 }
             }
@@ -383,7 +383,7 @@ class static_deque<T>
             if(_count < curSize)
             {
                 reverse_iterator newEnd(begin() + static_cast<difference_type>(_count));
-                std::for_each(rbegin(), newEnd, back_destroyer(*this));
+                std::for_each(rbegin(), newEnd, back_destroyer(*this)); //LCOV_EXCL_BR_LINE: We are not testing std::for_each branches
             }
             else if(_count > curSize)
             {
