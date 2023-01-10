@@ -579,6 +579,7 @@ class static_deque final : public static_deque<T>
             this->internal_rangeInit(std::make_move_iterator(_other.begin()), 
                                      std::make_move_iterator(_other.end()), 
                                      this->back_inserter(*this));
+            _other.clear();
         }
         static_deque(std::initializer_list<T> _iList)
         : static_deque()
@@ -597,6 +598,7 @@ class static_deque final : public static_deque<T>
         static_deque& operator=(base&& _other)
         {
             base::operator=(std::move(_other));
+            _other.clear();
             return *this;
         }
         static_deque& operator=(std::initializer_list<T> _iList)
