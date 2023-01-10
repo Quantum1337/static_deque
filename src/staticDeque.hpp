@@ -243,7 +243,7 @@ class static_deque<T>
         {
             assert_count_in_range(_count); 
 
-            unchecked_resize(_count, T());
+            unchecked_resize(_count);
         }
         void resize(size_type _count, value_type const& _value)
         {
@@ -375,7 +375,8 @@ class static_deque<T>
             return positionToInsert;
         }
 
-        void unchecked_resize(size_type _count, value_type const& _value)
+        template<typename... Type>
+        void unchecked_resize(size_type _count, Type&&... _value)
         {
             size_type curSize = size();
 
@@ -387,7 +388,7 @@ class static_deque<T>
             else if(_count > curSize)
             {
 
-                unchecked_push_back_count((_count - curSize), _value);
+                unchecked_push_back_count((_count - curSize), std::forward<Type>(_value)...);
             }   
             // else: Same size as before  
         }
