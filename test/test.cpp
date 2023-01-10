@@ -379,6 +379,11 @@ void Test_ElementAccess(void)
     TEST_ASSERT_EQUAL(13, UT_deque[3]);
     TEST_ASSERT_EQUAL(11, UT_deque.at(1));
     TEST_ASSERT_EQUAL(13, UT_deque.at(3));
+
+    const static_deque<uint32_t, DEQUE_SIZE> UT_deque_2 = UT_deque;
+
+    TEST_ASSERT_EQUAL(11, UT_deque_2[1]);
+    TEST_ASSERT_EQUAL(13, UT_deque_2.at(3));
 }
 
 void Test_Insert(void)
