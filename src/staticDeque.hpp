@@ -472,41 +472,41 @@ class static_deque<T>
         }
 
         // -- Asserts
-        void assert_space_left() noexcept
+        void assert_space_left() const noexcept
         {
             DEQUE_ASSERT(!full());
         }
 
-        void assert_has_elements() noexcept
+        void assert_has_elements() const noexcept
         {
             DEQUE_ASSERT(!empty());
         }
 
-        void assert_count_in_range(size_type _count)
+        void assert_count_in_range(size_type _count) const
         {
             DEQUE_ASSERT(_count <= max_size());
         }
 
-        void assert_access_in_range(size_type _count)
+        void assert_access_in_range(size_type _count) const
         {
             DEQUE_ASSERT(_count <= size());
         }
 
         template<typename InputIt>
-        void assert_iterator_in_range(InputIt _it) noexcept
+        void assert_iterator_in_range(InputIt _it) const noexcept
         {
             DEQUE_ASSERT(begin() <= _it);
             DEQUE_ASSERT(_it <= end());
         }
 
         template<typename InputIt>
-        static void assert_valid_iterator_pair(InputIt _first, InputIt _last) noexcept
+        void assert_valid_iterator_pair(InputIt _first, InputIt _last) const noexcept
         {
             DEQUE_ASSERT(_first <= _last);
         }
 
         template<typename InputIt>
-        void assert_iterator_pair_in_range(InputIt _first, InputIt _last) noexcept
+        void assert_iterator_pair_in_range(InputIt _first, InputIt _last) const noexcept
         {
             assert_iterator_in_range(_first);
             assert_iterator_in_range(_last);
