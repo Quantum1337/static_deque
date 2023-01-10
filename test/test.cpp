@@ -29,7 +29,7 @@ SOFTWARE.
 #include <queue>
 #include <stack>
 
-using namespace std_static;
+using namespace stds;
 
 void setUp(void)
 {

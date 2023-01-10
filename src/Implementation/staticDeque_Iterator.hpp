@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <iterator>
 
-namespace std_static
+namespace stds
 {
 namespace Implementation
 {
@@ -131,4 +131,4 @@ class base_iterator
 };
 
 } // namespace Implementation
-} // namespace std_static
+} // namespace stds

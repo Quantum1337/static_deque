@@ -32,7 +32,7 @@ SOFTWARE.
 // TBD
 #define DEQUE_ASSERT(x) do{ if(x){}else{} }while(0)
 
-namespace std_static
+namespace stds
 {
 
 template<typename T, Implementation::size_type=static_cast<Implementation::size_type>(0)>
@@ -693,4 +693,4 @@ void swap(static_deque<T>& _lhs,
     _lhs.swap(_rhs);
 }
 
-} // namespace std_static
+} // namespace stds
