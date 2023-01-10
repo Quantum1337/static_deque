@@ -482,12 +482,12 @@ class static_deque<T>
             DEQUE_ASSERT(!empty());
         }
 
-        void assert_count_in_range(size_type _count) const
+        void assert_count_in_range(size_type _count) const noexcept
         {
             DEQUE_ASSERT(_count <= max_size());
         }
 
-        void assert_access_in_range(size_type _count) const
+        void assert_access_in_range(size_type _count) const noexcept
         {
             DEQUE_ASSERT(_count <= size());
         }
