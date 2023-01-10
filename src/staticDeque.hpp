@@ -26,10 +26,10 @@ class static_deque<T>
         using const_pointer = value_type const*;
         using size_type = Implementation::size_type;
         using difference_type = Implementation::difference_type;
-        using iterator = Implementation::iterator<value_type, static_deque>;
-        using const_iterator = Implementation::iterator<value_type const, static_deque>;
-        using reverse_iterator = std::reverse_iterator<Implementation::iterator<value_type, static_deque>>;
-        using const_reverse_iterator = std::reverse_iterator<Implementation::iterator<value_type const, static_deque>>;
+        using iterator = Implementation::base_iterator<value_type, static_deque>;
+        using const_iterator = Implementation::base_iterator<value_type const, static_deque>;
+        using reverse_iterator = std::reverse_iterator<Implementation::base_iterator<value_type, static_deque>>;
+        using const_reverse_iterator = std::reverse_iterator<Implementation::base_iterator<value_type const, static_deque>>;
 
         // -- Assignment operator
         static_deque& operator=(static_deque const& _other)

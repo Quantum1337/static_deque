@@ -10,7 +10,7 @@ namespace Implementation
 {
 
 template<typename T, typename TDequeBase>
-class iterator
+class base_iterator
 {
     public:
         // -- Traits
@@ -21,19 +21,19 @@ class iterator
         using iterator_category = std::random_access_iterator_tag;
 
     private:
-        using nonconst_iterator = iterator<value_type, TDequeBase>;
-        using const_iterator = iterator<value_type const, TDequeBase>;
+        using iterator = base_iterator<value_type, TDequeBase>;
+        using const_iterator = base_iterator<value_type const, TDequeBase>;
         
     public:
 
         // -- Constructors
-        iterator(difference_type _initialIndex, pointer _storage, TDequeBase& _base)
+        base_iterator(difference_type _initialIndex, pointer _storage, TDequeBase& _base)
         : m_index{_initialIndex}
         , m_storage{_storage}
         , m_base{_base}
         {
         }
-        iterator(nonconst_iterator const& _other)
+        base_iterator(iterator const& _other)
         : m_index(_other.m_index)
         , m_storage(_other.m_storage)
         , m_base{_other.m_base}
@@ -41,16 +41,16 @@ class iterator
         }
     
         // -- Assignment
-        iterator& operator=(iterator const& _other)
+        base_iterator& operator=(base_iterator const& _other)
         {
             m_index = _other.m_index;
             return *this;
         }
 
         // -- (+)
-        iterator operator+(difference_type _offset) { return (iterator(*this) += _offset); }
-        iterator& operator++() { (static_cast<size_type>((++m_index)) == storage_size()) ? m_index = 0 : m_index; return *this; }
-        iterator& operator+=(difference_type _offset)
+        base_iterator operator+(difference_type _offset) { return (base_iterator(*this) += _offset); }
+        base_iterator& operator++() { (static_cast<size_type>((++m_index)) == storage_size()) ? m_index = 0 : m_index; return *this; }
+        base_iterator& operator+=(difference_type _offset)
         {
             if(_offset >= 0)
             {
@@ -65,10 +65,10 @@ class iterator
         }
 
         // -- (-)
-        iterator operator-(difference_type _offset) { return (iterator(*this) -= _offset); }
-        difference_type operator-(const_iterator const& _other) const { return ((iterator(*this) -= _other.m_index).m_index); }
-        iterator& operator--() { ((m_index--) == 0) ? m_index = (storage_size() - 1u) : m_index; return *this; }
-        iterator& operator-=(difference_type _offset)
+        base_iterator operator-(difference_type _offset) { return (base_iterator(*this) -= _offset); }
+        difference_type operator-(const_iterator const& _other) const { return ((base_iterator(*this) -= _other.m_index).m_index); }
+        base_iterator& operator--() { ((m_index--) == 0) ? m_index = (storage_size() - 1u) : m_index; return *this; }
+        base_iterator& operator-=(difference_type _offset)
         {
             if(_offset >= 0)
             {
@@ -102,8 +102,8 @@ class iterator
         pointer const     m_storage;
         TDequeBase const& m_base;
 
-        friend class iterator<value_type const, TDequeBase>;
-        friend class iterator<value_type, TDequeBase>;
+        friend iterator;
+        friend const_iterator;
 };
 
 } // namespace Implementation
