@@ -473,6 +473,18 @@ void Test_Swap(void)
         std::vector<uint32_t> UT_correctLayout{88, 99, 110, 120};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_2.begin()));
     }
+
+    static_deque<uint8_t>& UT_deque_3 = UT_deque_2;
+
+    UT_deque_3.swap(UT_deque_1);
+    {
+        std::vector<uint32_t> UT_correctLayout{11, 12, 13, 14, 15, 16};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_3.begin()));
+    }
+    {
+        std::vector<uint32_t> UT_correctLayout{88, 99, 110, 120};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_1.begin()));
+    }
 }
 
 void Test_Clear(void)
