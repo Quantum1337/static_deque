@@ -89,13 +89,14 @@ class iterator
         // -- Binary operators
         bool operator==(const_iterator const& _other) const { return (m_index == _other.m_index); }
         bool operator!=(const_iterator const& _other) const { return !(*this == _other); }
-        bool operator<(const_iterator const& _other) const { return ((*this - m_base.begin()) < (_other - m_base.begin())); }    
+        bool operator<(const_iterator const& _other) const { return (distanceFromBegin(*this) < distanceFromBegin(_other)); }    
         bool operator<=(const_iterator const& _other) const { return !(_other < *this); }
         bool operator>(const_iterator const& _other) const { return (_other < *this); }
         bool operator>=(const_iterator const& _other) const { return !(*this < _other); }
 
     private:
         size_type storage_size() { return (m_base.max_size() + 1u); }
+        difference_type distanceFromBegin(const_iterator const& _iterator) const { return (_iterator - m_base.begin()); }
 
         difference_type   m_index;
         pointer const     m_storage;
