@@ -856,6 +856,385 @@ void Test_ContainerAdapter_Stack(void)
     }
 }
 
+// Copied from https://github.com/microsoft/STL/blob/main/tests/tr1/tests/deque/test.cpp and adapted to unity
+void Test_STLStandardTests()
+{
+    class Copyable_int { // wrap an integer, copyable
+    public:
+        Copyable_int(int v = 0) : val(v) { // construct from value
+        }
+
+        Copyable_int(const Copyable_int& x) : val(x.val) { // construct from copied value
+        }
+
+        Copyable_int& operator=(const Copyable_int& x) { // copy value
+            val = x.val;
+            return *this;
+        }
+
+        operator int() const { // convert to int
+            return val;
+        }
+
+        bool operator==(const Copyable_int& x) const { // compare for equality
+            return val == x.val;
+        }
+
+        bool operator!=(const Copyable_int& x) const { // compare for equality
+            return val != x.val;
+        }
+
+        bool operator<(const Copyable_int& x) const { // compare for order
+            return val < x.val;
+        }
+
+        int val;
+
+        Copyable_int(Copyable_int&& x) : val(x.val) { // construct from moved value
+            x.val = -1;
+        }
+
+        Copyable_int& operator=(Copyable_int&& x) { // move value
+            val   = x.val;
+            x.val = -1;
+            return *this;
+        }
+    };
+
+    class Movable_int : public Copyable_int { // wrap a move-only integer
+    public:
+        typedef Copyable_int Mybase;
+
+        Movable_int(int v = 0) : Mybase(v) { // construct from value
+        }
+
+        Movable_int(int v1, int v2) : Mybase(v2 + (v1 << 4)) { // construct from two values
+        }
+
+        Movable_int(int v1, int v2, int v3) : Mybase(v3 + (v2 << 4) + (v1 << 8)) { // construct from three values
+        }
+
+        Movable_int(int v1, int v2, int v3, int v4)
+            : Mybase(v4 + (v3 << 4) + (v2 << 8) + (v1 << 12)) { // construct from four values
+        }
+
+        Movable_int(int v1, int v2, int v3, int v4, int v5)
+            : Mybase(v5 + (v4 << 4) + (v3 << 8) + (v2 << 12) + (v1 << 16)) { // construct from five values
+        }
+
+        Movable_int(Movable_int&& right) : Mybase(right.val) { // construct from moved value
+            right.val = -1;
+        }
+
+        Movable_int& operator=(Movable_int&& right) { // assign from moved value
+            if (this != &right) { // different, move it
+                val       = right.val;
+                right.val = -1;
+            }
+            return *this;
+        }
+
+        operator int() const { // convert to int
+            return val;
+        }
+
+        bool operator==(const Movable_int& x) const { // compare for equality
+            return val == x.val;
+        }
+
+        bool operator!=(const Movable_int& x) const { // compare for equality
+            return val != x.val;
+        }
+
+        bool operator<(const Movable_int& x) const { // compare for order
+            return val < x.val;
+        }
+
+        Movable_int(const Movable_int&)            = delete;
+        Movable_int& operator=(const Movable_int&) = delete;
+    };
+
+    typedef static_deque<char, 50u> Mycont;
+
+    char carr[] = "abc";
+
+    Mycont v0;
+    TEST_ASSERT_TRUE(v0.empty());
+    TEST_ASSERT_EQUAL(v0.size(), 0);
+
+    Mycont v1(5), v1a(6, 'x'), v1b(7, 'y');
+    TEST_ASSERT_EQUAL(v1.size(), 5);
+    TEST_ASSERT_EQUAL(v1.back(), '\0');
+    TEST_ASSERT_EQUAL(v1a.size(), 6);
+    TEST_ASSERT_EQUAL(v1a.back(), 'x');
+    TEST_ASSERT_EQUAL(v1b.size(), 7);
+    TEST_ASSERT_EQUAL(v1b.back(), 'y');
+
+    Mycont v2(v1a);
+    TEST_ASSERT_EQUAL(v2.size(), 6);
+    TEST_ASSERT_EQUAL(v2.front(), 'x');
+
+    Mycont v2a(v2);
+    TEST_ASSERT_EQUAL(v2a.size(), 6);
+    TEST_ASSERT_EQUAL(v2a.front(), 'x');
+
+    Mycont v3(v1a.begin(), v1a.end());
+    TEST_ASSERT_EQUAL(v3.size(), 6);
+    TEST_ASSERT_EQUAL(v3.front(), 'x');
+
+    const Mycont v4(v1a.begin(), v1a.end());
+    TEST_ASSERT_EQUAL(v4.size(), 6);
+    TEST_ASSERT_EQUAL(v4.front(), 'x');
+    v0 = v4;
+    TEST_ASSERT_EQUAL(v0.size(), 6);
+    TEST_ASSERT_EQUAL(v0.front(), 'x');
+    TEST_ASSERT_EQUAL(v0[0], 'x');
+    TEST_ASSERT_EQUAL(v0.at(5), 'x');
+
+    v0.resize(8);
+    TEST_ASSERT_EQUAL(v0.size(), 8);
+    TEST_ASSERT_EQUAL(v0.back(), '\0');
+    v0.resize(10, 'z');
+    TEST_ASSERT_EQUAL(v0.size(), 10);
+    TEST_ASSERT_EQUAL(v0.back(), 'z');
+    TEST_ASSERT_TRUE(v0.size() <= v0.max_size());
+
+    {
+        Mycont::iterator p_it(v0.begin());
+        Mycont::const_iterator p_cit(v4.begin());
+        Mycont::reverse_iterator p_rit(v0.rbegin());
+        Mycont::const_reverse_iterator p_crit(v4.rbegin());
+        TEST_ASSERT_EQUAL(*p_it, 'x');
+        TEST_ASSERT_EQUAL(*--(p_it = v0.end()), 'z');
+        TEST_ASSERT_EQUAL(*p_cit, 'x');
+        TEST_ASSERT_EQUAL(*--(p_cit = v4.end()), 'x');
+        TEST_ASSERT_EQUAL(*p_rit, 'z');
+        TEST_ASSERT_EQUAL(*--(p_rit = v0.rend()), 'x');
+        TEST_ASSERT_EQUAL(*p_crit, 'x');
+        TEST_ASSERT_EQUAL(*--(p_crit = v4.rend()), 'x');
+
+        // Not possible to default construct the const_iterator
+        // Mycont::const_iterator p_it1 = Mycont::const_iterator();
+        // Mycont::const_iterator p_it2 = Mycont::const_iterator();
+        // CHECK(p_it1 == p_it2); // check null forward iterator comparisons
+    }
+
+    { // check const iterators generators
+        Mycont::const_iterator p_it(v0.cbegin());
+        Mycont::const_iterator p_cit(v4.cbegin());
+        Mycont::const_reverse_iterator p_rit(v0.crbegin());
+        Mycont::const_reverse_iterator p_crit(v4.crbegin());
+        TEST_ASSERT_EQUAL(*p_it, 'x');
+        TEST_ASSERT_EQUAL(*--(p_it = v0.cend()), 'z');
+        TEST_ASSERT_EQUAL(*p_cit, 'x');
+        TEST_ASSERT_EQUAL(*--(p_cit = v4.cend()), 'x');
+        TEST_ASSERT_EQUAL(*p_rit, 'z');
+        TEST_ASSERT_EQUAL(*--(p_rit = v0.crend()), 'x');
+        TEST_ASSERT_EQUAL(*p_crit, 'x');
+        TEST_ASSERT_EQUAL(*--(p_crit = v4.crend()), 'x');
+
+        // Not possible to default construct the const_iterator
+        //Mycont::const_iterator p_it1 = Mycont::const_iterator();
+        //Mycont::const_iterator p_it2 = Mycont::const_iterator();
+        //CHECK(p_it1 == p_it2); // check null forward iterator comparisons
+    }
+
+
+    TEST_ASSERT_EQUAL(v0.front(), 'x');
+    TEST_ASSERT_EQUAL(v4.front(), 'x');
+    v0.push_front('a');
+    TEST_ASSERT_EQUAL(v0.front(), 'a');
+    v0.pop_front();
+    TEST_ASSERT_EQUAL(v0.front(), 'x');
+    TEST_ASSERT_EQUAL(v4.front(), 'x');
+
+    v0.push_back('a');
+    TEST_ASSERT_EQUAL(v0.back(), 'a');
+    v0.pop_back();
+    TEST_ASSERT_EQUAL(v0.back(), 'z');
+    TEST_ASSERT_EQUAL(v4.back(), 'x');
+
+    {
+        Mycont v5;
+        v5.resize(10);
+        TEST_ASSERT_EQUAL(v5.size(), 10);
+        TEST_ASSERT_EQUAL(v5[9], 0);
+
+        Mycont v6(20, 'x');
+        Mycont v7(std::move(v6));
+        TEST_ASSERT_EQUAL(v6.size(), 0);
+        TEST_ASSERT_EQUAL(v7.size(), 20);
+
+        Mycont v6a(20, 'x');
+        Mycont v7a(std::move(v6a));
+        TEST_ASSERT_EQUAL(v6a.size(), 0);
+        TEST_ASSERT_EQUAL(v7a.size(), 20);
+
+        Mycont v8;
+        v8 = std::move(v7);
+        TEST_ASSERT_EQUAL(v7.size(), 0);
+        TEST_ASSERT_EQUAL(v8.size(), 20);
+
+        Mycont v8a(std::move(v8));
+        TEST_ASSERT_EQUAL(v8.size(), 0);
+        TEST_ASSERT_EQUAL(v8a.size(), 20);
+
+        static_deque<Movable_int, 50> v9;
+        v9.resize(10);
+        TEST_ASSERT_EQUAL(v9.size(), 10);
+        TEST_ASSERT_EQUAL(v9[9].val, 0);
+
+        static_deque<Movable_int, 50> v10;
+        Movable_int mi1(1);
+        v10.push_back(std::move(mi1));
+        TEST_ASSERT_EQUAL(mi1.val, -1);
+        TEST_ASSERT_EQUAL(v10[0].val, 1);
+
+        Movable_int mi2(2);
+        v10.push_front(std::move(mi2));
+        TEST_ASSERT_EQUAL(mi2.val, -1);
+        TEST_ASSERT_EQUAL(v10[0].val, 2);
+
+        Movable_int mi3(3);
+        v10.insert(v10.begin(), std::move(mi3));
+        TEST_ASSERT_EQUAL(mi3.val, -1);
+        TEST_ASSERT_EQUAL(v10[0].val, 3);
+
+        v10.emplace_front();
+        TEST_ASSERT_EQUAL(v10[0].val, 0);
+        v10.emplace_front(2);
+        TEST_ASSERT_EQUAL(v10[0].val, 2);
+        v10.emplace_front(3, 2);
+        TEST_ASSERT_EQUAL(v10[0].val, 0x32);
+        v10.emplace_front(4, 3, 2);
+        TEST_ASSERT_EQUAL(v10[0].val, 0x432);
+        v10.emplace_front(5, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10[0].val, 0x5432);
+        v10.emplace_front(6, 5, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10[0].val, 0x65432);
+
+        v10.emplace_back();
+        TEST_ASSERT_EQUAL(v10.back().val, 0);
+        v10.emplace_back(2);
+        TEST_ASSERT_EQUAL(v10.back().val, 2);
+        v10.emplace_back(3, 2);
+        TEST_ASSERT_EQUAL(v10.back().val, 0x32);
+        v10.emplace_back(4, 3, 2);
+        TEST_ASSERT_EQUAL(v10.back().val, 0x432);
+        v10.emplace_back(5, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10.back().val, 0x5432);
+        v10.emplace_back(6, 5, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10.back().val, 0x65432);
+
+        v10.emplace(v10.begin() + 1);
+        TEST_ASSERT_EQUAL(v10[1].val, 0);
+        v10.emplace(v10.begin() + 1, 2);
+        TEST_ASSERT_EQUAL(v10[1].val, 2);
+        v10.emplace(v10.begin() + 1, 3, 2);
+        TEST_ASSERT_EQUAL(v10[1].val, 0x32);
+        v10.emplace(v10.begin() + 1, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10[1].val, 0x432);
+        v10.emplace(v10.begin() + 1, 5, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10[1].val, 0x5432);
+        v10.emplace(v10.begin() + 1, 6, 5, 4, 3, 2);
+        TEST_ASSERT_EQUAL(v10[1].val, 0x65432);
+    }
+
+    { // check for lvalue stealing
+        static_deque<Copyable_int, 50> v11;
+        Copyable_int ci1(1);
+        v11.push_back(ci1);
+        TEST_ASSERT_EQUAL(ci1.val, 1);
+        TEST_ASSERT_EQUAL(v11[0].val, 1);
+
+        Copyable_int ci2(2);
+        v11.push_front(ci2);
+        TEST_ASSERT_EQUAL(ci2.val, 2);
+        TEST_ASSERT_EQUAL(v11[0].val, 2);
+
+        Copyable_int ci3(3);
+        v11.insert(v11.begin(), ci3);
+        TEST_ASSERT_EQUAL(ci3.val, 3);
+        TEST_ASSERT_EQUAL(v11[0].val, 3);
+        TEST_ASSERT_EQUAL(v11[1].val, 2);
+
+        static_deque<Copyable_int, 50> v12(v11);
+        TEST_ASSERT_TRUE(v11 == v12);
+        v11 = v12;
+        TEST_ASSERT_TRUE(v11 == v12);
+
+        static_deque<Copyable_int, 50> v13(std::make_move_iterator(v11.begin()), std::make_move_iterator(v11.end()));
+        TEST_ASSERT_EQUAL(v13.front().val, 3);
+        TEST_ASSERT_EQUAL(v11.front().val, -1);
+    }
+
+    v0.assign(v4.begin(), v4.end());
+    TEST_ASSERT_EQUAL(v0.size(), v4.size());
+    TEST_ASSERT_EQUAL(v0.front(), v4.front());
+    v0.assign(4, 'w');
+    TEST_ASSERT_EQUAL(v0.size(), 4);
+    TEST_ASSERT_EQUAL(v0.front(), 'w');
+    TEST_ASSERT_EQUAL(*v0.insert(v0.begin(), 'a'), 'a');
+    TEST_ASSERT_EQUAL(v0.front(), 'a');
+    TEST_ASSERT_EQUAL(*++v0.begin(), 'w');
+    TEST_ASSERT_EQUAL(*v0.insert(v0.begin(), 2, 'b'), 'b');
+    TEST_ASSERT_EQUAL(v0.front(), 'b');
+    TEST_ASSERT_EQUAL(*++v0.begin(), 'b');
+    TEST_ASSERT_EQUAL(*++ ++v0.begin(), 'a');
+    TEST_ASSERT_EQUAL(*v0.insert(v0.end(), v4.begin(), v4.end()), *v4.begin());
+    TEST_ASSERT_EQUAL(v0.back(), v4.back());
+    TEST_ASSERT_EQUAL(*v0.insert(v0.end(), carr, carr + 3), *carr);
+    TEST_ASSERT_EQUAL(v0.back(), 'c');
+    v0.erase(v0.begin());
+    TEST_ASSERT_EQUAL(v0.front(), 'b');
+    TEST_ASSERT_EQUAL(*++v0.begin(), 'a');
+    v0.erase(v0.begin(), ++v0.begin());
+    TEST_ASSERT_EQUAL(v0.front(), 'a');
+
+    // Does not make any sens for a static_deque
+    // { // test added C++11 functionality
+    //     Mycont v0x;
+    //     v0x.push_back('a');
+    //     v0x.shrink_to_fit();
+    //     CHECK_INT(v0x.front(), 'a');
+    // }
+
+    {
+        std::initializer_list<char> init{'a', 'b', 'c'};
+        Mycont v11(init);
+        TEST_ASSERT_EQUAL(v11.size(), 3);
+        TEST_ASSERT_EQUAL(v11[2], 'c');
+
+        v11.clear();
+        v11 = init;
+        TEST_ASSERT_EQUAL(v11.size(), 3);
+        TEST_ASSERT_EQUAL(v11[2], 'c');
+
+        TEST_ASSERT_EQUAL(*v11.insert(v11.begin() + 1, init), *init.begin());
+        TEST_ASSERT_EQUAL(v11.size(), 6);
+        TEST_ASSERT_EQUAL(v11[2], 'b');
+
+        v11.assign(init);
+        TEST_ASSERT_EQUAL(v11.size(), 3);
+        TEST_ASSERT_EQUAL(v11[2], 'c');
+    }
+
+    v0.clear();
+    TEST_ASSERT_TRUE(v0.empty());
+    v0.swap(v1);
+    TEST_ASSERT_TRUE(!v0.empty());
+    TEST_ASSERT_TRUE(v1.empty());
+    std::swap(v0, v1);
+    TEST_ASSERT_TRUE(v0.empty());
+    TEST_ASSERT_TRUE(!v1.empty());
+    TEST_ASSERT_TRUE(v1 == v1);
+    TEST_ASSERT_TRUE(v0 < v1);
+    TEST_ASSERT_TRUE(v0 != v1);
+    TEST_ASSERT_TRUE(v1 > v0);
+    TEST_ASSERT_TRUE(v0 <= v1);
+    TEST_ASSERT_TRUE(v1 >= v0);
+}
+
 int main(int argc, char const *argv[])
 {
     UNITY_BEGIN();
@@ -877,6 +1256,8 @@ int main(int argc, char const *argv[])
     RUN_TEST(Test_Assignments);
     RUN_TEST(Test_ContainerAdapter_Queue);
     RUN_TEST(Test_ContainerAdapter_Stack);
+    // Copied from https://github.com/microsoft/STL/blob/main/tests/tr1/tests/deque/test.cpp and adapted to unity
+    RUN_TEST(Test_STLStandardTests);
     return UNITY_END();
 
     return 0;
