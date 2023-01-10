@@ -24,7 +24,7 @@ SOFTWARE.
 
 #pragma once
 
-#include "staticDeque_Types.hpp"
+#include "deque_Types.hpp"
 
 #include <iterator>
 

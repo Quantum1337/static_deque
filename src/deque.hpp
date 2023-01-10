@@ -24,8 +24,8 @@ SOFTWARE.
 
 #pragma once
 
-#include "Implementation/staticDeque_Iterator.hpp"
-#include "Implementation/staticDeque_Types.hpp"
+#include "Implementation/deque_Iterator.hpp"
+#include "Implementation/deque_Types.hpp"
 
 #include <algorithm>
 

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "../src/staticDeque.hpp"
+#include "../src/deque.hpp"
 #include "unity/unity.h"
 
 #include <vector>
