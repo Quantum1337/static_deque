@@ -97,15 +97,15 @@ class static_deque<T>
         // -- Iterators
         iterator begin() noexcept { return m_tail; };
         const_iterator begin() const noexcept { return m_tail; };
-        const_iterator cbegin() noexcept { return m_tail; };
+        const_iterator cbegin() const noexcept { return m_tail; };
 
         iterator end() noexcept { return m_head; };
         const_iterator end() const noexcept { return m_head; };
-        const_iterator cend() noexcept { return m_head; };
+        const_iterator cend() const noexcept { return m_head; };
 
         reverse_iterator rbegin() noexcept { return reverse_iterator(m_head); };
         const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(m_head); };
-        const_reverse_iterator crbegin() noexcept { return const_reverse_iterator(m_head); };
+        const_reverse_iterator crbegin() const noexcept { return const_reverse_iterator(m_head); };
 
         reverse_iterator rend() noexcept { return reverse_iterator(m_tail); };
         const_reverse_iterator rend() const noexcept { return const_reverse_iterator(m_tail); };
