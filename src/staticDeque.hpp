@@ -624,6 +624,41 @@ constexpr bool operator==(static_deque<T> const& _lhs,
     return ((_lhs.size() == _rhs.size()) && std::equal(_lhs.cbegin(), _lhs.cend(), _rhs.cbegin()));
 }
 
+template <typename T>
+constexpr bool operator!=(static_deque<T> const& _lhs, 
+                          static_deque<T> const& _rhs) noexcept
+{
+    return !(_lhs == _rhs);
+}
+
+template <typename T>
+constexpr bool operator<(static_deque<T> const& _lhs, 
+                         static_deque<T> const& _rhs) noexcept
+{
+    return std::lexicographical_compare(_lhs.begin(), _lhs.end(), _rhs.begin(), _rhs.end());
+}
+
+template <typename T>
+constexpr bool operator<=(static_deque<T> const& _lhs, 
+                          static_deque<T> const& _rhs) noexcept
+{
+    return !(_rhs < _lhs);
+}
+
+template <typename T>
+constexpr bool operator>(static_deque<T> const& _lhs, 
+                         static_deque<T> const& _rhs) noexcept
+{
+    return (_rhs < _lhs);
+}
+
+template <typename T>
+constexpr bool operator>=(static_deque<T> const& _lhs, 
+                          static_deque<T> const& _rhs) noexcept
+{
+    return !(_lhs < _rhs);
+}
+
 template<typename T>
 void swap(static_deque<T>& _lhs,
           static_deque<T>& _rhs) noexcept
