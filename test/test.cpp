@@ -45,7 +45,7 @@ void Test_Constructors(void)
 {
     { // Default constructor
         static constexpr size_t DEQUE_SIZE = 5u;
-        static_deque<uint8_t, DEQUE_SIZE> UT_deque;
+        deque<uint8_t, DEQUE_SIZE> UT_deque;
 
         TEST_ASSERT_EQUAL(true, UT_deque.empty());
         TEST_ASSERT_EQUAL(false, UT_deque.full());
@@ -56,7 +56,7 @@ void Test_Constructors(void)
     { // Count / lvalue constructor
         static constexpr size_t DEQUE_SIZE = 5u;
         uint8_t UT_lvalue = 22;
-        static_deque<uint8_t, DEQUE_SIZE> UT_deque(5, UT_lvalue);
+        deque<uint8_t, DEQUE_SIZE> UT_deque(5, UT_lvalue);
 
         std::vector<uint32_t> UT_correctLayout{22,22,22,22,22};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
@@ -64,7 +64,7 @@ void Test_Constructors(void)
     
     { // Count constructor
         static constexpr size_t DEQUE_SIZE = 5u;
-        static_deque<uint8_t, DEQUE_SIZE> UT_deque(5);
+        deque<uint8_t, DEQUE_SIZE> UT_deque(5);
 
         std::vector<uint32_t> UT_correctLayout{0,0,0,0,0};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
@@ -73,17 +73,17 @@ void Test_Constructors(void)
     { // Iterator constructor
         static constexpr size_t DEQUE_SIZE = 5u;
         std::vector<uint8_t> UT_correctLayout{55,66,77,88,99};
-        static_deque<uint8_t, DEQUE_SIZE> UT_deque(UT_correctLayout.begin(), UT_correctLayout.end());
+        deque<uint8_t, DEQUE_SIZE> UT_deque(UT_correctLayout.begin(), UT_correctLayout.end());
 
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
     }
 
     { // Copy-constructor 
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
+        deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
 
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink(UT_dequeSource);
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink(UT_dequeSource);
 
         std::vector<uint32_t> UT_correctLayout{99, 88, 77, 66, 55, 44, 33};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
@@ -94,7 +94,7 @@ void Test_Constructors(void)
     { // Move-constructor 
         static constexpr size_t DEQUE_SIZE = 8u;
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink(static_deque<uint32_t, DEQUE_SIZE>{99,88,77,66,55,44,33});
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink(deque<uint32_t, DEQUE_SIZE>{99,88,77,66,55,44,33});
 
         std::vector<uint32_t> UT_correctLayout{99, 88, 77, 66, 55, 44, 33};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
@@ -103,7 +103,7 @@ void Test_Constructors(void)
 
     { // Initializer list constructor
         static constexpr size_t DEQUE_SIZE = 6u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint32_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         std::vector<uint32_t> UT_correctLayout{11, 12, 13, 14, 15, 16};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
@@ -114,7 +114,7 @@ void Test_Constructors(void)
 void Test_LValue_PushBack(void)
 {
     static constexpr size_t DEQUE_SIZE = 6u;
-    static_deque<uint8_t, DEQUE_SIZE> UT_deque;
+    deque<uint8_t, DEQUE_SIZE> UT_deque;
     std::vector<uint8_t> UT_lvalues{6, 10, 11, 12, 13, 14};
 
     UT_deque.push_back(UT_lvalues[0]);
@@ -141,7 +141,7 @@ void Test_LValue_PushBack(void)
 void Test_LValue_PushFront(void)
 {
     static constexpr size_t DEQUE_SIZE = 7u;
-    static_deque<uint8_t, DEQUE_SIZE> UT_deque;
+    deque<uint8_t, DEQUE_SIZE> UT_deque;
     std::vector<uint8_t> UT_lvalues{9, 10, 11, 12, 13, 14, 15};
 
     UT_deque.push_front(UT_lvalues[0]);
@@ -206,7 +206,7 @@ void Test_RValue_PushBack(void)
     };
 
     static constexpr size_t DEQUE_SIZE = 5u;
-    static_deque<Moveable_Item, DEQUE_SIZE> UT_deque;
+    deque<Moveable_Item, DEQUE_SIZE> UT_deque;
 
     UT_deque.push_back(Moveable_Item(0, 1, 2));
     TEST_ASSERT_EQUAL(false, UT_deque.empty());
@@ -288,7 +288,7 @@ void Test_RValue_PushFront(void)
     };
 
     static constexpr size_t DEQUE_SIZE = 7u;
-    static_deque<Moveable_Item, DEQUE_SIZE> UT_deque;
+    deque<Moveable_Item, DEQUE_SIZE> UT_deque;
 
     UT_deque.push_front(Moveable_Item(0, 1, 2));
     TEST_ASSERT_EQUAL(false, UT_deque.empty());
@@ -336,7 +336,7 @@ void Test_RValue_PushFront(void)
 void Test_PopFront_PopBack(void)
 {
     static constexpr size_t DEQUE_SIZE = 8u;
-    static_deque<uint8_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});     
+    deque<uint8_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});     
 
     {
         UT_deque.pop_front();
@@ -380,7 +380,7 @@ void Test_PopFront_PopBack(void)
 void Test_ElementAccess(void)
 {
     static constexpr size_t DEQUE_SIZE = 4u;
-    static_deque<uint32_t, DEQUE_SIZE> UT_deque;
+    deque<uint32_t, DEQUE_SIZE> UT_deque;
 
     UT_deque.push_back(5);
     UT_deque.push_back(6);
@@ -404,7 +404,7 @@ void Test_ElementAccess(void)
     TEST_ASSERT_EQUAL(11, UT_deque.at(1));
     TEST_ASSERT_EQUAL(13, UT_deque.at(3));
 
-    const static_deque<uint32_t, DEQUE_SIZE> UT_deque_2 = UT_deque;
+    const deque<uint32_t, DEQUE_SIZE> UT_deque_2 = UT_deque;
 
     TEST_ASSERT_EQUAL(11, UT_deque_2[1]);
     TEST_ASSERT_EQUAL(13, UT_deque_2.at(3));
@@ -415,7 +415,7 @@ void Test_Insert(void)
     { // Copy insert (1)
         uint8_t value = 111;
         static constexpr size_t DEQUE_SINK_SIZE = 8u;
-        static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
+        deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
 
         auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() += 3), value);   
 
@@ -427,7 +427,7 @@ void Test_Insert(void)
     { // Move insert (2)
         uint8_t value = 111;
         static constexpr size_t DEQUE_SINK_SIZE = 8u;
-        static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
+        deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
 
         auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() += 3), std::move(value));   
 
@@ -438,9 +438,9 @@ void Test_Insert(void)
 
     { // Count copy insert (3)
         static constexpr size_t DEQUE_SINK_SIZE = 10u;
-        static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
+        deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
 
-        auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() -= -3), static_cast<static_deque<uint8_t, DEQUE_SINK_SIZE>::size_type>(4), 111);   
+        auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() -= -3), static_cast<deque<uint8_t, DEQUE_SINK_SIZE>::size_type>(4), 111);   
 
         std::vector<uint32_t> UT_correctLayout{66, 77, 88, 111, 111, 111, 111, 99, 11, 22};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
@@ -449,10 +449,10 @@ void Test_Insert(void)
 
     { // Iterator insert (4)
         static constexpr size_t DEQUE_SOURCE_SIZE = 6u;
-        static_deque<uint8_t, DEQUE_SOURCE_SIZE> UT_dequeSource({11, 12, 13, 14, 15, 16});  
+        deque<uint8_t, DEQUE_SOURCE_SIZE> UT_dequeSource({11, 12, 13, 14, 15, 16});  
 
         static constexpr size_t DEQUE_SINK_SIZE = 9u;
-        static_deque<uint32_t, DEQUE_SINK_SIZE> UT_dequeSink({33, 44 ,55});  
+        deque<uint32_t, DEQUE_SINK_SIZE> UT_dequeSink({33, 44 ,55});  
 
         auto insertPos = UT_dequeSink.insert(++(UT_dequeSink.begin()), UT_dequeSource.begin(), UT_dequeSource.end());
 
@@ -463,7 +463,7 @@ void Test_Insert(void)
 
     { // Initializer list insert (5)
         static constexpr size_t DEQUE_SINK_SIZE = 9u;
-        static_deque<uint32_t, DEQUE_SINK_SIZE> UT_dequeSink({33, 44 ,55});  
+        deque<uint32_t, DEQUE_SINK_SIZE> UT_dequeSink({33, 44 ,55});  
 
         auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() += 2), {11, 12, 13, 14, 15, 16});
 
@@ -476,10 +476,10 @@ void Test_Insert(void)
 void Test_Swap(void)
 {
     static constexpr size_t DEQUE_SOURCE_SIZE = 8u;
-    static_deque<uint8_t, DEQUE_SOURCE_SIZE> UT_deque_1({11, 12, 13, 14, 15, 16}); 
+    deque<uint8_t, DEQUE_SOURCE_SIZE> UT_deque_1({11, 12, 13, 14, 15, 16}); 
 
     static constexpr size_t DEQUE_SINK_SIZE = 7u;
-    static_deque<uint8_t, DEQUE_SINK_SIZE> UT_deque_2{88, 99, 110, 120};
+    deque<uint8_t, DEQUE_SINK_SIZE> UT_deque_2{88, 99, 110, 120};
 
     UT_deque_2.swap(UT_deque_1);
 
@@ -503,7 +503,7 @@ void Test_Swap(void)
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_2.begin()));
     }
 
-    static_deque<uint8_t>& UT_deque_3 = UT_deque_2;
+    deque<uint8_t>& UT_deque_3 = UT_deque_2;
 
     UT_deque_3.swap(UT_deque_1);
     {
@@ -519,7 +519,7 @@ void Test_Swap(void)
 void Test_Clear(void)
 {
     static constexpr size_t DEQUE_SIZE = 8u;
-    static_deque<uint8_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16}); 
+    deque<uint8_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16}); 
     TEST_ASSERT_EQUAL(false, UT_deque.empty());
     TEST_ASSERT_EQUAL(false, UT_deque.full());
     TEST_ASSERT_EQUAL(6, UT_deque.size());
@@ -534,7 +534,7 @@ void Test_Erase(void)
 {
     { // (1)
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         auto iter = UT_deque.erase(std::prev(UT_deque.end()));
 
@@ -545,7 +545,7 @@ void Test_Erase(void)
     }
     {
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         auto iter = UT_deque.erase(UT_deque.begin());
 
@@ -557,7 +557,7 @@ void Test_Erase(void)
 
     { // (2)
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         auto last = UT_deque.begin() += 3;
         auto iter = UT_deque.erase(UT_deque.begin(), last);
@@ -569,7 +569,7 @@ void Test_Erase(void)
     }
     {
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         auto first = UT_deque.end() -= 4;
         auto iter = UT_deque.erase(first, UT_deque.end());
@@ -581,7 +581,7 @@ void Test_Erase(void)
     }
     {
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         auto first = UT_deque.begin() += 1;
         auto last = UT_deque.end() -= 2;
@@ -594,7 +594,7 @@ void Test_Erase(void)
     }
     {
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
+        deque<uint16_t, DEQUE_SIZE> UT_deque({11, 12, 13, 14, 15, 16});
 
         auto first = UT_deque.end() -= 4;
         auto last = UT_deque.end() -= 4;
@@ -611,7 +611,7 @@ void Test_Resize(void)
 {
 
     static constexpr size_t DEQUE_SIZE_SINK = 10u;
-    static_deque<uint32_t, DEQUE_SIZE_SINK> UT_deque{111, 222, 333};
+    deque<uint32_t, DEQUE_SIZE_SINK> UT_deque{111, 222, 333};
 
     UT_deque.resize(6);
 
@@ -672,7 +672,7 @@ void Test_EmplaceBack(void)
     };
 
     static constexpr size_t DEQUE_SIZE = 8u;
-    static_deque<SomeData, DEQUE_SIZE> UT_deque;
+    deque<SomeData, DEQUE_SIZE> UT_deque;
 
     uint32_t dataForPtr = 1234;
     uint32_t dataForRef = 5678;
@@ -704,7 +704,7 @@ void Test_EmplaceFront(void)
     };
 
     static constexpr size_t DEQUE_SIZE = 8u;
-    static_deque<SomeData, DEQUE_SIZE> UT_deque;
+    deque<SomeData, DEQUE_SIZE> UT_deque;
 
     uint32_t dataForPtr = 1122;
     uint32_t dataForRef = 3344;
@@ -750,7 +750,7 @@ void Test_Emplace(void)
     uint32_t dataForPtr3 = 9933;
 
     static constexpr size_t DEQUE_SIZE = 8u;
-    static_deque<SomeData, DEQUE_SIZE> UT_deque(5, SomeData(99, &dataForPtr1));
+    deque<SomeData, DEQUE_SIZE> UT_deque(5, SomeData(99, &dataForPtr1));
 
     {
         UT_deque.emplace((UT_deque.begin() += 1), 22, &dataForPtr2);
@@ -779,10 +779,10 @@ void Test_Assignments(void)
 {
     { // Copy-assignment (to derived class) (1)
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
+        deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
 
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
         TEST_ASSERT_FALSE(UT_dequeSink.full());
 
@@ -796,10 +796,10 @@ void Test_Assignments(void)
 
     { // Move-assignment (to derived class) (2)
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
+        deque<uint32_t, DEQUE_SIZE> UT_dequeSource{99,88,77,66,55,44,33};
 
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
         TEST_ASSERT_FALSE(UT_dequeSink.full());
 
@@ -813,7 +813,7 @@ void Test_Assignments(void)
 
     { // Initializer-List assignment (to derived class) (3)
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
         TEST_ASSERT_FALSE(UT_dequeSink.full());
 
@@ -827,14 +827,14 @@ void Test_Assignments(void)
 
     { // Copy-assignment (to base class) (1)
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{88,77,66,55,44,33,22};
+        deque<uint32_t, DEQUE_SIZE> UT_dequeSource{88,77,66,55,44,33,22};
 
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
         TEST_ASSERT_FALSE(UT_dequeSink.full());
 
-        static_deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
+        deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
         UT_dequeSinkBase = UT_dequeSource;
 
         std::vector<uint32_t> UT_correctLayout{88, 77, 66, 55, 44, 33, 22};
@@ -845,14 +845,14 @@ void Test_Assignments(void)
 
     { // Copy-assignment (to base class) (2)
         static constexpr size_t DEQUE_SIZE = 8u;
-        static_deque<uint32_t, DEQUE_SIZE> UT_dequeSource{88,77,66,55,44,33,22};
+        deque<uint32_t, DEQUE_SIZE> UT_dequeSource{88,77,66,55,44,33,22};
 
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
         TEST_ASSERT_FALSE(UT_dequeSink.full());
 
-        static_deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
+        deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
         UT_dequeSinkBase = std::move(UT_dequeSource);
 
         std::vector<uint32_t> UT_correctLayout{88, 77, 66, 55, 44, 33, 22};
@@ -863,11 +863,11 @@ void Test_Assignments(void)
 
     { // Initializer-List assignment (to base class) (3)
         static constexpr size_t DEQUE_SIZE_SINK = 7u;
-        static_deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
+        deque<uint32_t, DEQUE_SIZE_SINK> UT_dequeSink{111, 222, 333};
         TEST_ASSERT_EQUAL(3, UT_dequeSink.size());
         TEST_ASSERT_FALSE(UT_dequeSink.full());
 
-        static_deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
+        deque<uint32_t>& UT_dequeSinkBase = UT_dequeSink; 
         UT_dequeSinkBase = {88, 99, 11, 22, 33, 44, 55};
 
         std::vector<uint32_t> UT_correctLayout{88, 99, 11, 22, 33, 44, 55};
@@ -880,7 +880,7 @@ void Test_Assignments(void)
 void Test_ContainerAdapter_Queue(void)
 {
     static constexpr size_t DEQUE_SIZE = 8;
-    std::queue<uint32_t, static_deque<uint32_t, DEQUE_SIZE>> UT_queue;
+    std::queue<uint32_t, deque<uint32_t, DEQUE_SIZE>> UT_queue;
 
     UT_queue.push(2);
     UT_queue.push(3);
@@ -900,7 +900,7 @@ void Test_ContainerAdapter_Queue(void)
 void Test_ContainerAdapter_Stack(void)
 {
     static constexpr size_t DEQUE_SIZE = 8;
-    std::stack<uint32_t, static_deque<uint32_t, DEQUE_SIZE>> UT_stack;
+    std::stack<uint32_t, deque<uint32_t, DEQUE_SIZE>> UT_stack;
 
     UT_stack.push(8);
     UT_stack.push(7);
@@ -1015,7 +1015,7 @@ void Test_STLStandardTests()
         Movable_int& operator=(const Movable_int&) = delete;
     };
 
-    typedef static_deque<char, 50u> Mycont;
+    typedef deque<char, 50u> Mycont;
 
     char carr[] = "abc";
 
@@ -1140,12 +1140,12 @@ void Test_STLStandardTests()
         TEST_ASSERT_EQUAL(v8.size(), 0);
         TEST_ASSERT_EQUAL(v8a.size(), 20);
 
-        static_deque<Movable_int, 50> v9;
+        deque<Movable_int, 50> v9;
         v9.resize(10);
         TEST_ASSERT_EQUAL(v9.size(), 10);
         TEST_ASSERT_EQUAL(v9[9].val, 0);
 
-        static_deque<Movable_int, 50> v10;
+        deque<Movable_int, 50> v10;
         Movable_int mi1(1);
         v10.push_back(std::move(mi1));
         TEST_ASSERT_EQUAL(mi1.val, -1);
@@ -1202,7 +1202,7 @@ void Test_STLStandardTests()
     }
 
     { // check for lvalue stealing
-        static_deque<Copyable_int, 50> v11;
+        deque<Copyable_int, 50> v11;
         Copyable_int ci1(1);
         v11.push_back(ci1);
         TEST_ASSERT_EQUAL(ci1.val, 1);
@@ -1219,12 +1219,12 @@ void Test_STLStandardTests()
         TEST_ASSERT_EQUAL(v11[0].val, 3);
         TEST_ASSERT_EQUAL(v11[1].val, 2);
 
-        static_deque<Copyable_int, 50> v12(v11);
+        deque<Copyable_int, 50> v12(v11);
         TEST_ASSERT_TRUE(v11 == v12);
         v11 = v12;
         TEST_ASSERT_TRUE(v11 == v12);
 
-        static_deque<Copyable_int, 50> v13(std::make_move_iterator(v11.begin()), std::make_move_iterator(v11.end()));
+        deque<Copyable_int, 50> v13(std::make_move_iterator(v11.begin()), std::make_move_iterator(v11.end()));
         TEST_ASSERT_EQUAL(v13.front().val, 3);
         TEST_ASSERT_EQUAL(v11.front().val, -1);
     }
@@ -1252,7 +1252,7 @@ void Test_STLStandardTests()
     v0.erase(v0.begin(), ++v0.begin());
     TEST_ASSERT_EQUAL(v0.front(), 'a');
 
-    // Does not make any sens for a static_deque
+    // Does not make any sens for a stds::deque
     // { // test added C++11 functionality
     //     Mycont v0x;
     //     v0x.push_back('a');

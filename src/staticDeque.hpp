@@ -36,10 +36,10 @@ namespace stds
 {
 
 template<typename T, Implementation::size_type=static_cast<Implementation::size_type>(0)>
-class static_deque;
+class deque;
 
 template<typename T>
-class static_deque<T>
+class deque<T>
 {
     public:
         // -- Traits
@@ -50,18 +50,18 @@ class static_deque<T>
         using const_pointer = value_type const*;
         using size_type = Implementation::size_type;
         using difference_type = Implementation::difference_type;
-        using iterator = Implementation::base_iterator<value_type, static_deque>;
-        using const_iterator = Implementation::base_iterator<value_type const, static_deque>;
-        using reverse_iterator = std::reverse_iterator<Implementation::base_iterator<value_type, static_deque>>;
-        using const_reverse_iterator = std::reverse_iterator<Implementation::base_iterator<value_type const, static_deque>>;
+        using iterator = Implementation::base_iterator<value_type, deque>;
+        using const_iterator = Implementation::base_iterator<value_type const, deque>;
+        using reverse_iterator = std::reverse_iterator<Implementation::base_iterator<value_type, deque>>;
+        using const_reverse_iterator = std::reverse_iterator<Implementation::base_iterator<value_type const, deque>>;
 
         // -- Assignment operator
-        static_deque& operator=(static_deque const& _other)
+        deque& operator=(deque const& _other)
         {
             assign(_other.begin(), _other.end());
             return *this;
         }
-        static_deque& operator=(static_deque&& _other)
+        deque& operator=(deque&& _other)
         {              
             clear();
             internal_rangeInit(std::make_move_iterator(_other.begin()), 
@@ -69,7 +69,7 @@ class static_deque<T>
                                 back_inserter(*this));
             return *this;
         }
-        static_deque& operator=(std::initializer_list<T> _ilist)
+        deque& operator=(std::initializer_list<T> _ilist)
         {
             assign(_ilist);
             return *this;
@@ -276,7 +276,7 @@ class static_deque<T>
             unchecked_resize(_count, _value);
         }
 
-        void swap(static_deque& _other) noexcept
+        void swap(deque& _other) noexcept
         {
             internal_swap(_other);
         }
@@ -284,7 +284,7 @@ class static_deque<T>
     protected:
 
         // -- Constructor
-        static_deque(pointer _storage, size_type _storageSize)
+        deque(pointer _storage, size_type _storageSize)
         : m_tail{static_cast<difference_type>(_storageSize / 2), _storage, *this}
         , m_head{m_tail}
         , m_capacity{_storageSize - 1u}
@@ -296,25 +296,25 @@ class static_deque<T>
         }
 
         // -- Destructor
-        ~static_deque() { clear(); }
+        ~deque() { clear(); }
 
         // Lambdas for the functors below are also possible here and might be more readable !
         // -- Functors
         class back_destroyer
         {
             public:
-                back_destroyer(static_deque& _deque): m_deque{_deque} {}     
+                back_destroyer(deque& _deque): m_deque{_deque} {}     
                 void operator()(const_reference _value) { m_deque.unchecked_pop_back(); };
             private:
-                static_deque& m_deque;
+                deque& m_deque;
         };
         class front_destroyer
         {
             public:
-                front_destroyer(static_deque& _deque): m_deque{_deque} {}
+                front_destroyer(deque& _deque): m_deque{_deque} {}
                 void operator()(const_reference _value) { m_deque.unchecked_pop_front(); };
             private:
-                static_deque& m_deque;
+                deque& m_deque;
         };
 
         // -- Iterator adapter (back inserter)
@@ -456,7 +456,7 @@ class static_deque<T>
             ++m_tail;
         }
 
-        void internal_swap(static_deque& _other) noexcept
+        void internal_swap(deque& _other) noexcept
         {
             if(size() < _other.size())
             {
@@ -545,10 +545,10 @@ class static_deque<T>
 
 
 template <typename T, Implementation::size_type N>
-class static_deque final : public static_deque<T>
+class deque final : public deque<T>
 {
     private:
-        using base = static_deque<T>;
+        using base = deque<T>;
         
     public:
         // -- Traits
@@ -565,67 +565,67 @@ class static_deque final : public static_deque<T>
         using const_reverse_iterator = typename base::const_reverse_iterator;
 
         // -- Constructors
-        static_deque()
+        deque()
         : base(static_cast<pointer>(static_cast<void*>(m_storage)), STORAGE_SIZE)
         {
             static_assert(STORAGE_SIZE > 1, "Invalid size");
         }
-        explicit static_deque(size_type _count, T const& _value)
-        : static_deque()
+        explicit deque(size_type _count, T const& _value)
+        : deque()
         {
             this->assert_count_in_range(_count);
 
             this->unchecked_push_back_count(_count, _value);       
         }
-        explicit static_deque(size_type _count)
-        : static_deque()
+        explicit deque(size_type _count)
+        : deque()
         {
             this->assert_count_in_range(_count);
 
             this->unchecked_push_back_count(_count, std::move(T())); 
         }
         template<class InputIt>
-        static_deque(InputIt _first, InputIt _last)
-        : static_deque()
+        deque(InputIt _first, InputIt _last)
+        : deque()
         {
             this->internal_rangeInit(_first, _last, this->back_inserter(*this));
         }
-        static_deque(static_deque const& _other) : static_deque(static_cast<base const&>(_other)) {}
-        static_deque(base const& _other)  
-        : static_deque()
+        deque(deque const& _other) : deque(static_cast<base const&>(_other)) {}
+        deque(base const& _other)  
+        : deque()
         {
             this->internal_rangeInit(_other.begin(), _other.end(), this->back_inserter(*this));
         }
-        static_deque(static_deque&& _other) : static_deque(std::move(static_cast<base&>(_other))) {}
-        static_deque(base&& _other)
-        : static_deque()
+        deque(deque&& _other) : deque(std::move(static_cast<base&>(_other))) {}
+        deque(base&& _other)
+        : deque()
         {
             this->internal_rangeInit(std::make_move_iterator(_other.begin()), 
                                      std::make_move_iterator(_other.end()), 
                                      this->back_inserter(*this));
             _other.clear();
         }
-        static_deque(std::initializer_list<T> _iList)
-        : static_deque()
+        deque(std::initializer_list<T> _iList)
+        : deque()
         {
             this->internal_rangeInit(_iList.begin(), _iList.end(), this->back_inserter(*this));
         }
 
         // -- Assignments
-        static_deque& operator=(static_deque const& _other) { return operator=(static_cast<const base&>(_other)); }
-        static_deque& operator=(base const& _other)
+        deque& operator=(deque const& _other) { return operator=(static_cast<const base&>(_other)); }
+        deque& operator=(base const& _other)
         {
             base::operator=(_other);
             return *this;
         }
-        static_deque& operator=(static_deque&& _other) { return operator=(std::move(static_cast<base&>(_other))); }
-        static_deque& operator=(base&& _other)
+        deque& operator=(deque&& _other) { return operator=(std::move(static_cast<base&>(_other))); }
+        deque& operator=(base&& _other)
         {
             base::operator=(std::move(_other));
             _other.clear();
             return *this;
         }
-        static_deque& operator=(std::initializer_list<T> _iList)
+        deque& operator=(std::initializer_list<T> _iList)
         {
             base::operator=(_iList);
             return *this;
@@ -645,50 +645,50 @@ class static_deque final : public static_deque<T>
 };
 
 template <typename T>
-constexpr bool operator==(static_deque<T> const& _lhs, 
-                          static_deque<T> const& _rhs) noexcept
+constexpr bool operator==(deque<T> const& _lhs, 
+                          deque<T> const& _rhs) noexcept
 {
     return ((_lhs.size() == _rhs.size()) && std::equal(_lhs.cbegin(), _lhs.cend(), _rhs.cbegin()));
 }
 
 template <typename T>
-constexpr bool operator!=(static_deque<T> const& _lhs, 
-                          static_deque<T> const& _rhs) noexcept
+constexpr bool operator!=(deque<T> const& _lhs, 
+                          deque<T> const& _rhs) noexcept
 {
     return !(_lhs == _rhs);
 }
 
 template <typename T>
-constexpr bool operator<(static_deque<T> const& _lhs, 
-                         static_deque<T> const& _rhs) noexcept
+constexpr bool operator<(deque<T> const& _lhs, 
+                         deque<T> const& _rhs) noexcept
 {
     return std::lexicographical_compare(_lhs.begin(), _lhs.end(), _rhs.begin(), _rhs.end());
 }
 
 template <typename T>
-constexpr bool operator<=(static_deque<T> const& _lhs, 
-                          static_deque<T> const& _rhs) noexcept
+constexpr bool operator<=(deque<T> const& _lhs, 
+                          deque<T> const& _rhs) noexcept
 {
     return !(_rhs < _lhs);
 }
 
 template <typename T>
-constexpr bool operator>(static_deque<T> const& _lhs, 
-                         static_deque<T> const& _rhs) noexcept
+constexpr bool operator>(deque<T> const& _lhs, 
+                         deque<T> const& _rhs) noexcept
 {
     return (_rhs < _lhs);
 }
 
 template <typename T>
-constexpr bool operator>=(static_deque<T> const& _lhs, 
-                          static_deque<T> const& _rhs) noexcept
+constexpr bool operator>=(deque<T> const& _lhs, 
+                          deque<T> const& _rhs) noexcept
 {
     return !(_lhs < _rhs);
 }
 
 template<typename T>
-void swap(static_deque<T>& _lhs,
-          static_deque<T>& _rhs) noexcept
+void swap(deque<T>& _lhs,
+          deque<T>& _rhs) noexcept
 {
     _lhs.swap(_rhs);
 }
