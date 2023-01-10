@@ -411,7 +411,7 @@ void Test_Insert(void)
         static constexpr size_t DEQUE_SINK_SIZE = 10u;
         static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink({66, 77, 88, 99, 11, 22}); 
 
-        auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() += 3), static_cast<static_deque<uint8_t, DEQUE_SINK_SIZE>::size_type>(4), 111);   
+        auto insertPos = UT_dequeSink.insert((UT_dequeSink.begin() -= -3), static_cast<static_deque<uint8_t, DEQUE_SINK_SIZE>::size_type>(4), 111);   
 
         std::vector<uint32_t> UT_correctLayout{66, 77, 88, 111, 111, 111, 111, 99, 11, 22};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
@@ -447,19 +447,31 @@ void Test_Insert(void)
 void Test_Swap(void)
 {
     static constexpr size_t DEQUE_SOURCE_SIZE = 8u;
-    static_deque<uint8_t, DEQUE_SOURCE_SIZE> UT_dequeSource({11, 12, 13, 14, 15, 16}); 
+    static_deque<uint8_t, DEQUE_SOURCE_SIZE> UT_deque_1({11, 12, 13, 14, 15, 16}); 
 
-    static constexpr size_t DEQUE_SINK_SIZE = 8u;
-    static_deque<uint8_t, DEQUE_SINK_SIZE> UT_dequeSink{88, 99, 110, 120};
-    UT_dequeSink.swap(UT_dequeSource);
+    static constexpr size_t DEQUE_SINK_SIZE = 7u;
+    static_deque<uint8_t, DEQUE_SINK_SIZE> UT_deque_2{88, 99, 110, 120};
+
+    UT_deque_2.swap(UT_deque_1);
 
     {
         std::vector<uint32_t> UT_correctLayout{11, 12, 13, 14, 15, 16};
-        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSink.begin()));
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_2.begin()));
     }
     {
         std::vector<uint32_t> UT_correctLayout{88, 99, 110, 120};
-        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_dequeSource.begin()));
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_1.begin()));
+    }
+
+    UT_deque_2.swap(UT_deque_1);
+
+    {
+        std::vector<uint32_t> UT_correctLayout{11, 12, 13, 14, 15, 16};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_1.begin()));
+    }
+    {
+        std::vector<uint32_t> UT_correctLayout{88, 99, 110, 120};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque_2.begin()));
     }
 }
 
@@ -574,6 +586,14 @@ void Test_Resize(void)
         std::vector<uint32_t> UT_correctLayout{111, 222, 333, 0, 0, 0, 10, 10, 10 ,10};
         TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
         TEST_ASSERT_EQUAL(10, UT_deque.size());
+    }
+
+    UT_deque.resize(6);
+
+    {
+        std::vector<uint32_t> UT_correctLayout{111, 222, 333, 0, 0, 0};
+        TEST_ASSERT_TRUE(std::equal(UT_correctLayout.begin(), UT_correctLayout.end(), UT_deque.begin()));
+        TEST_ASSERT_EQUAL(6, UT_deque.size());
     }
 
     UT_deque.resize(6);
