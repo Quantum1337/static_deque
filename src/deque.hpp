@@ -65,8 +65,8 @@ class deque<T>
         {              
             clear();
             internal_rangeInit(std::make_move_iterator(_other.begin()), 
-                                std::make_move_iterator(_other.end()), 
-                                back_inserter(*this));
+                               std::make_move_iterator(_other.end()), 
+                               back_inserter(*this));
             return *this;
         }
         deque& operator=(std::initializer_list<T> _ilist)
@@ -411,7 +411,6 @@ class deque<T>
             }
             else if(_count > curSize)
             {
-
                 unchecked_push_back_count((_count - curSize), std::forward<Type>(_value)...);
             }   
             // else: Same size as before  
