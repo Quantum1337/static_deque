@@ -182,6 +182,7 @@ void Test_RValue_PushBack(void)
 
             Moveable_Item(Moveable_Item&& _other)
             {
+                static_cast<void>(_other);
                 ++moveCtorCalls;
                 m_1 = _other.m_1;
                 m_2 = _other.m_2;
@@ -190,12 +191,14 @@ void Test_RValue_PushBack(void)
 
             Moveable_Item& operator=(Moveable_Item&& _other)
             {
+                static_cast<void>(_other);
                 ++moveAssignmentCalls;
                 return *this;
             }
 
             bool operator==(Moveable_Item const &_other) const
             {
+                static_cast<void>(_other);
                 return ((m_1 == _other.m_1) && (m_2 == _other.m_2) && (m_3 == _other.m_3));
             }
 
@@ -264,6 +267,7 @@ void Test_RValue_PushFront(void)
 
             Moveable_Item(Moveable_Item&& _other)
             {
+                static_cast<void>(_other);
                 ++moveCtorCalls;
                 m_1 = _other.m_1;
                 m_2 = _other.m_2;
@@ -272,12 +276,14 @@ void Test_RValue_PushFront(void)
 
             Moveable_Item& operator=(Moveable_Item&& _other)
             {
+                static_cast<void>(_other);
                 ++moveAssignmentCalls;
                 return *this;
             }
 
             bool operator==(Moveable_Item const &_other) const
             {
+                static_cast<void>(_other);
                 return ((m_1 == _other.m_1) && (m_2 == _other.m_2) && (m_3 == _other.m_3));
             }
 
@@ -1298,6 +1304,9 @@ void Test_STLStandardTests()
 
 int main(int argc, char const *argv[])
 {
+    static_cast<void>(argc);
+    static_cast<void>(argv);
+    
     UNITY_BEGIN();
     RUN_TEST(Test_Constructors);
     RUN_TEST(Test_LValue_PushBack);
