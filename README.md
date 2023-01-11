@@ -26,9 +26,9 @@ stds::deque<uint32_t>& myDequeRef = myDeque;
 myDequeRef.push_front(30);
 ```
 
-**Test Coverage**
-lines: 100.0% (347 out of 347)
-functions: 97.9% (825 out of 843)
+**Test Coverage**\
+lines: 100.0% (347 out of 347)\
+functions: 97.9% (825 out of 843)\
 branches: 88.4% (84 out of 95)
 
 ## LICENSE
