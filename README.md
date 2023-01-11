@@ -1,6 +1,6 @@
 # stds::deque
 A static implementation of [std::deque](https://en.cppreference.com/w/cpp/container/deque) with
-focus on embedded devices where the usage of a heap is not allowed
+focus on embedded devices where the usage of a heap is not allowed.
 
 **How to use**
 
@@ -19,14 +19,15 @@ myDeque.push_front(20);
 ```
 
 You can assign the stds::deque to a reference which is independent 
-from the maximum size and use it as usual
+from the maximum size and use it as usual:
 
 ```c++
 stds::deque<uint32_t>& myDequeRef = myDeque;
 myDequeRef.push_front(30);
 ```
 
-**Test Coverage**\
+**Test Coverage**
+
 lines: 100.0% (347 out of 347)\
 functions: 97.9% (825 out of 843)\
 branches: 88.4% (84 out of 95)
