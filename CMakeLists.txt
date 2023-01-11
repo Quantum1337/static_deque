@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/coverage)
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/coverage/report)
 
-add_compile_options(-Wall -Werror -Wconversion --coverage -fdiagnostics-color=always)
+add_compile_options(-Wall -Wextra -Werror -Wconversion --coverage -fdiagnostics-color=always)
 add_link_options(--coverage)
 
 add_executable(Test_Exec test/test.cpp test/unity/unity.c)
