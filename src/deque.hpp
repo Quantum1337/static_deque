@@ -304,7 +304,7 @@ class deque<T>
         {
             public:
                 back_destroyer(deque& _deque): m_deque{_deque} {}     
-                void operator()(const_reference _value) { m_deque.unchecked_pop_back(); };
+                void operator()(const_reference _value) { static_cast<void>(_value); m_deque.unchecked_pop_back(); };
             private:
                 deque& m_deque;
         };
@@ -312,7 +312,7 @@ class deque<T>
         {
             public:
                 front_destroyer(deque& _deque): m_deque{_deque} {}
-                void operator()(const_reference _value) { m_deque.unchecked_pop_front(); };
+                void operator()(const_reference _value) { static_cast<void>(_value); m_deque.unchecked_pop_front(); };
             private:
                 deque& m_deque;
         };
