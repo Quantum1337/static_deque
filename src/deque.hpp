@@ -26,11 +26,9 @@ SOFTWARE.
 
 #include "Implementation/deque_Iterator.hpp"
 #include "Implementation/deque_Types.hpp"
+#include "Implementation/deque_Assert.hpp"
 
 #include <algorithm>
-
-// TBD
-#define DEQUE_ASSERT(x) do{ if(x){}else{} }while(0)
 
 namespace stds
 {
