@@ -63,7 +63,13 @@ class base_iterator
         , m_base{_other.m_base}
         {
         }
-    
+        base_iterator(const_iterator const& _other)
+        : m_index(_other.m_index)
+        , m_storage(_other.m_storage)
+        , m_base{_other.m_base}
+        {
+        }
+        
         // -- Assignment
         base_iterator& operator=(base_iterator const& _other)
         {
