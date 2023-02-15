@@ -33,7 +33,7 @@ namespace Implementation
 {
 
 template <typename T>
-using aligned_storage_type = typename std::aligned_storage_t<sizeof(T), alignof(T)>::type;
+using aligned_storage_type = typename std::aligned_storage_t<sizeof(T), alignof(T)>;
 using difference_type = ptrdiff_t;
 using size_type = size_t;
 
