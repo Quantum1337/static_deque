@@ -21,7 +21,7 @@ add_custom_target(
 
 add_custom_target(Test_Eval ALL
     COMMAND gcovr -s --exclude-throw-branches --decision -r ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR}/CMakeFiles/Test_Exec.dir/test
-    COMMAND gcovr -r ${CMAKE_SOURCE_DIR}/src --exclude-throw-branches --decision --json-summary-pretty --html --html-details --output report/ ${CMAKE_BINARY_DIR}/CMakeFiles/Test_Exec.dir/test
+    COMMAND gcovr -r ${CMAKE_SOURCE_DIR}/src --exclude-throw-branches --decision --json-summary-pretty --html-details --output report/ ${CMAKE_BINARY_DIR}/CMakeFiles/Test_Exec.dir/test
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/coverage
     DEPENDS Test_Run
 )
