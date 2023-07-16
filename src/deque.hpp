@@ -171,9 +171,9 @@ class deque<T>
         {
             assert_iterator_in_range(_pos);
             assert_valid_iterator_pair(_first, _last);
-            assert_count_in_range(size() + std::distance(_first, _last));
+            assert_count_in_range(size() + std::distance(_first, _last)); //LCOV_EXCL_BR_LINE: We are not testing throw branches
 
-            return unchecked_insert_it(_pos, _first, _last);                          
+            return unchecked_insert_it(_pos, _first, _last); //LCOV_EXCL_BR_LINE: We are not testing throw branches                          
         }
         iterator insert(const_iterator _pos, std::initializer_list<T> _iList)
         {
@@ -404,7 +404,7 @@ class deque<T>
 
             if(_count < curSize)
             {
-                reverse_iterator newEnd(begin() + static_cast<difference_type>(_count));
+                reverse_iterator newEnd(begin() + static_cast<difference_type>(_count)); //LCOV_EXCL_BR_LINE: We are not testing throw branches
                 std::for_each(rbegin(), newEnd, back_destroyer(*this)); //LCOV_EXCL_BR_LINE: We are not testing std::for_each branches
             }
             else if(_count > curSize)
