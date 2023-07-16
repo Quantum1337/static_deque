@@ -4,7 +4,7 @@ focus on embedded devices where the usage of a heap is not allowed.
 
 **How to use**
 
-You can define a empty stds::deque as follow:
+You can define an empty stds::deque as follow:
 
 ```c++
 constexpr size_t MAX_SIZE = 10;
@@ -30,7 +30,7 @@ myDequeRef.push_front(30);
 
 lines: 100.0% (347 out of 347)\
 functions: 97.9% (825 out of 843)\
-branches: 88.4% (84 out of 95)
+branches: 90.9% (80 out of 88)
 
 ## LICENSE
 
