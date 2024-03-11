@@ -65,6 +65,7 @@ class deque<T>
             internal_rangeInit(std::make_move_iterator(_other.begin()), 
                                std::make_move_iterator(_other.end()), 
                                back_inserter(*this));
+            _other.clear();
             return *this;
         }
         deque& operator=(std::initializer_list<T> _ilist)
