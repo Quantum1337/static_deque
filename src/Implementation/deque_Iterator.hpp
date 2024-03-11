@@ -78,7 +78,7 @@ class base_iterator
         }
 
         // -- (+)
-        base_iterator operator+(difference_type _offset) { return (base_iterator(*this) += _offset); }
+        base_iterator operator+(difference_type _offset) const { return (base_iterator(*this) += _offset); }
         base_iterator& operator++() { (static_cast<size_type>((++m_index)) == storage_size()) ? m_index = 0 : m_index; return *this; }
         base_iterator& operator+=(difference_type _offset)
         {
@@ -95,7 +95,7 @@ class base_iterator
         }
 
         // -- (-)
-        base_iterator operator-(difference_type _offset) { return (base_iterator(*this) -= _offset); }
+        base_iterator operator-(difference_type _offset) const { return (base_iterator(*this) -= _offset); }
         difference_type operator-(const_iterator const& _other) const { return ((base_iterator(*this) -= _other.m_index).m_index); }
         base_iterator& operator--() { ((m_index--) == 0) ? m_index = (storage_size() - 1u) : m_index; return *this; }
         base_iterator& operator-=(difference_type _offset)
